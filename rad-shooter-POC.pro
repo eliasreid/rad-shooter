@@ -1,10 +1,19 @@
 CONFIG -= qt
+CONFIG += console
 TARGET = radshooter
 
-HEADERS =
+HEADERS = \
+    game.h \
+    gameobject.h \
+    physics.h \
+    player.h
 
 SOURCES = \
-   $$PWD/main.cpp
+   $$PWD/main.cpp \
+   game.cpp \
+   gameobject.cpp \
+   physics.cpp \
+   player.cpp
 
 # do an if linux / windows for the vsdevlib
 
