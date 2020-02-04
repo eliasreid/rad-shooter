@@ -68,6 +68,9 @@ bool Game::Init(){
           //Instantiate physics and player
           physics_ = Physics();
           player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
+          SpawnEnemy();
+
+
           //Hide mouses - leave mouse on for development
 //          SDL_ShowCursor(SDL_DISABLE);
         }
@@ -102,6 +105,10 @@ void Game::HandleEvents(){
 
 void Game::Update(){
   player_->Update();
+  // EnemyHandler.Update(); once I have the class
+  for(auto enemy: enemies_) {
+    enemy->Update();
+  }
 
   physics_.UpdateTime();
 }
@@ -110,6 +117,9 @@ void Game::Render(){
   SDL_SetRenderDrawColor(renderer_, 0xFF, 0xFF, 0xFF, 0xFF);
   SDL_RenderClear(renderer_);
   player_->Render();
+  for(auto enemy: enemies_) {
+    enemy->Render();
+  }
 
   SDL_RenderPresent(renderer_);
 }
@@ -136,4 +146,17 @@ void Game::Close(){
 
 bool Game::IsRunning(){
   return running_;
+}
+
+void Game::SpawnEnemy() {
+  int size = 30;
+  Physics::Vec2D vel;
+  vel.x = -0.001;
+  vel.y = 0.0;
+  int x, y;
+  SDL_GetWindowSize(window_, &x, &y);
+
+  SDL_Rect spawn_rect = {x, y / 2, size, size};
+
+  enemies_.push_back(new Enemy(renderer_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
 }

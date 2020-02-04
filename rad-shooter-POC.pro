@@ -3,6 +3,7 @@ CONFIG += console
 TARGET = radshooter
 
 HEADERS = \
+    enemy.h \
     game.h \
     gameobject.h \
     physics.h \
@@ -10,6 +11,7 @@ HEADERS = \
 
 SOURCES = \
    $$PWD/main.cpp \
+   enemy.cpp \
    game.cpp \
    gameobject.cpp \
    physics.cpp \

@@ -2,8 +2,10 @@
 #define GAME_H
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
 #include "gameobject.h"
 #include "player.h"
+#include "enemy.h"
 
 class Game
 {
@@ -31,6 +33,10 @@ private:
 
   Physics physics_;
   Player* player_;
+  std::vector<Enemy*> enemies_;
+
+  void SpawnEnemy();
+
 };
 
 #endif // GAME_H
