@@ -29,6 +29,7 @@ private:
   SDL_Window* window_;
   SDL_Event e;
 
+  Physics physics_;
   Player* player_;
 };
 

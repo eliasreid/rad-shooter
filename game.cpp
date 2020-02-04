@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.h"
+#include "physics.h"
 
 Game::Game() : running_(false), paused_(false) // false unless initialized
 {
@@ -64,6 +65,8 @@ bool Game::Init(){
                                        player_x_size,
                                        player_y_size};
 
+          //Instantiate physics and player
+          physics_ = Physics();
           player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
           //Hide mouses - leave mouse on for development
 //          SDL_ShowCursor(SDL_DISABLE);
@@ -80,6 +83,7 @@ void Game::HandleEvents(){
 
   //SDL_PollEvents will return zero when there's no events left on the queue
   while(SDL_PollEvent(&e) != 0){
+
     //Handle game related Keyboard inputs.
     if(e.type == SDL_KEYDOWN){
       switch(e.key.keysym.sym){
@@ -87,6 +91,7 @@ void Game::HandleEvents(){
         paused_ = !paused_;
       }
     }
+
     if(e.type == SDL_QUIT){
       running_ = false;
     } else{
@@ -97,6 +102,8 @@ void Game::HandleEvents(){
 
 void Game::Update(){
   player_->Update();
+
+  physics_.UpdateTime();
 }
 
 void Game::Render(){
