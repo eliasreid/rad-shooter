@@ -1,14 +1,14 @@
 #include "player.h"
 
-Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect intial_dest_rect, SDL_Window* window):GameObject(rend, texture_path, intial_dest_rect){
+Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window) :
+  GameObject(rend, texture_path, initial_dest_rect) {
 
   window_ = window;
   int x_size, y_size;
   SDL_GetWindowSize(window_, &x_size, &y_size);
-  ray_length = sqrt(pow(x_size,2) + pow(y_size,2));
+  ray_length_ = sqrt(pow(x_size,2) + pow(y_size,2));
 
-  prev_time = std::chrono::high_resolution_clock::now();
-  ray_velocity = 0.001; // will be an important gameplay parameter
+  ray_velocity_ = 0.001; // will be an important gameplay parameter
 
 }
 
@@ -19,8 +19,8 @@ void Player::HandleEvents(SDL_Event &e){
     SDL_GetMouseState(&x, &y);
 
     //player should be centered on mouse - used to update render rect in Update()
-    player_centre.x = x;
-    player_centre.y = y;
+    centre_.x = x;
+    centre_.y = y;
 
   }
 }
@@ -28,20 +28,19 @@ void Player::HandleEvents(SDL_Event &e){
 void Player::Update(){
 
   //Update player's render destination rect.
-  dest_rect.x = player_centre.x - dest_rect.w/2;
-  dest_rect.y = player_centre.y - dest_rect.h/2;
+  dest_rect.x = centre_.x - dest_rect.w/2;
+  dest_rect.y = centre_.y - dest_rect.h/2;
 
   //apply angular velocity to ray_angle.
-  Physics::Move(ray_angle, ray_velocity);
-  if(ray_angle > 360.0){
-    ray_angle -= 360.0;
+  Physics::Move(ray_angle_, ray_velocity_);
+  if(ray_angle_ > 360.0){
+    ray_angle_ -= 360.0;
   }
 
   //Set ray start/endpoint based on new angle.
-  ray_start.x = player_centre.x;
-  ray_start.y = player_centre.y;
-  ray_end.x = player_centre.x + ray_length * sin(ray_angle);
-  ray_end.y = player_centre.y - ray_length * cos(ray_angle);
+  ray_start_ = centre_;
+  ray_end_.x = ray_start_.x + ray_length_ * sin(ray_angle_);
+  ray_end_.y = ray_start_.y - ray_length_ * cos(ray_angle_);
 }
 
 void Player::Render(){
@@ -52,7 +51,7 @@ void Player::Render(){
 
   //Render ray cursor
   SDL_SetRenderDrawColor(renderer_,0,0,0,255);
-  SDL_RenderDrawLine(renderer_, ray_start.x, ray_start.y, ray_end.x, ray_end.y);
+  SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
 }
 
 
