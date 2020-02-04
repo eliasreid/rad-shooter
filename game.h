@@ -24,6 +24,7 @@ public:
 private:
 
   bool running_;
+  bool paused_;
   SDL_Renderer* renderer_;
   SDL_Window* window_;
   SDL_Event e;
