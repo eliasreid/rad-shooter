@@ -65,8 +65,8 @@ bool Game::Init(){
                                        player_y_size};
 
           player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
-          //Hide mouse
-          SDL_ShowCursor(SDL_DISABLE);
+          //Hide mouses - leave mouse on for development
+//          SDL_ShowCursor(SDL_DISABLE);
         }
       }
     }
