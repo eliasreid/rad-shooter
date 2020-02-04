@@ -1,7 +1,7 @@
-#include "game.h"
 #include <iostream>
+#include "game.h"
 
-Game::Game() : running_(false) // false unless initialized
+Game::Game() : running_(false), paused_(false) // false unless initialized
 {
 }
 
@@ -80,6 +80,13 @@ void Game::HandleEvents(){
 
   //SDL_PollEvents will return zero when there's no events left on the queue
   while(SDL_PollEvent(&e) != 0){
+    //Handle game related Keyboard inputs.
+    if(e.type == SDL_KEYDOWN){
+      switch(e.key.keysym.sym){
+      case SDLK_ESCAPE:
+        paused_ = !paused_;
+      }
+    }
     if(e.type == SDL_QUIT){
       running_ = false;
     } else{
@@ -102,7 +109,9 @@ void Game::Render(){
 
 void Game::GameLoop(){
   HandleEvents();
-  Update();
+  if(!paused_){
+    Update();
+  }
   Render();
 }
 
