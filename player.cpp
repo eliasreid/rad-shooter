@@ -1,3 +1,4 @@
+#include <iostream>
 #include "player.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window) :
@@ -6,9 +7,11 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   window_ = window;
   int x_size, y_size;
   SDL_GetWindowSize(window_, &x_size, &y_size);
-  ray_length_ = sqrt(pow(x_size,2) + pow(y_size,2));
+  ray_length_ = Physics::Length(x_size, y_size);
 
   ray_velocity_ = 0.001; // will be an important gameplay parameter
+
+  health_ = 2;
 
 }
 
@@ -27,7 +30,11 @@ void Player::HandleEvents(SDL_Event &e){
 
 void Player::Update(){
 
-  //Update player's render destination rect.
+  if(health_ < 1){
+    std::cout << "player's health has reached zero!" << std::endl;
+  }
+
+  //Update player's render destination rect
   dest_rect.x = centre_.x - dest_rect.w/2;
   dest_rect.y = centre_.y - dest_rect.h/2;
 
@@ -54,4 +61,8 @@ void Player::Render(){
   SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
 }
 
+void Player::Damage(){
+  std::cout << "player has been damaged!" << std::endl;
+  health_--;
+}
 

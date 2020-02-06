@@ -4,6 +4,7 @@ TARGET = radshooter
 
 HEADERS = \
     enemy.h \
+    enemyhandler.h \
     game.h \
     gameobject.h \
     physics.h \
@@ -12,6 +13,7 @@ HEADERS = \
 SOURCES = \
    $$PWD/main.cpp \
    enemy.cpp \
+   enemyhandler.cpp \
    game.cpp \
    gameobject.cpp \
    physics.cpp \

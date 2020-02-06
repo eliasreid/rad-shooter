@@ -6,6 +6,7 @@
 #include "gameobject.h"
 #include "player.h"
 #include "enemy.h"
+#include "enemyhandler.h"
 
 class Game
 {
@@ -33,7 +34,8 @@ private:
 
   Physics physics_;
   Player* player_;
-  std::vector<Enemy*> enemies_;
+  EnemyHandler* enemy_handler_;
+//  std::vector<Enemy*> enemies_;
 
   void SpawnEnemy();
 

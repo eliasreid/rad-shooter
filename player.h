@@ -18,6 +18,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update() override;
   void Render() override;
+  void Damage();
 
 private:
   Physics::Vec2D centre_;
@@ -26,6 +27,8 @@ private:
   float ray_length_;
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
+
+  int health_;
 
   SDL_Window* window_;
 };

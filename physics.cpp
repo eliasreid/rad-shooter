@@ -19,3 +19,24 @@ void Physics::UpdateTime(){
   auto current_time = std::chrono::high_resolution_clock::now();
   frametime_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_time).count();
 }
+
+void Physics::Normalize(Vec2D &vec){
+  //calc length, divide both elements by that length
+
+  vec = vec / Length(vec);
+}
+
+float Physics::Length(const Vec2D &vec){
+  return sqrt(pow(vec.x,2) + pow(vec.y,2));
+}
+
+float Physics::Length(float x, float y){
+  return sqrt(pow(x,2) + pow(y,2));
+}
+
+/*
+ * For calclulating the centre of an SDL_Rect
+*/
+Physics::Vec2D Physics::Centre(SDL_Rect r){
+  return Vec2D(r.x + r.w/2.0, r.y + r.h/2.0);
+}
