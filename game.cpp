@@ -150,16 +150,3 @@ void Game::Close(){
 bool Game::IsRunning(){
   return running_;
 }
-
-//void Game::SpawnEnemy() {
-//  int size = 30;
-//  Physics::Vec2D vel;
-//  vel.x = -0.001;
-//  vel.y = 0.0;
-//  int x, y;
-//  SDL_GetWindowSize(window_, &x, &y);
-
-//  SDL_Rect spawn_rect = {x, y / 2, size, size};
-
-//  enemies_.push_back(new Enemy(renderer_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
-//}
