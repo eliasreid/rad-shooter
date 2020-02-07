@@ -19,12 +19,22 @@ SOURCES = \
    physics.cpp \
    player.cpp
 
-# do an if linux / windows for the vsdevlib
+win32 {
+    # Windows build config
+    LIBDIR = G:/vsdevlib
 
-LIBDIR = G:/vsdevlib
+    INCLUDEPATH =   $$LIBDIR/SDL2_image-2.0.5/include \
+                    $$LIBDIR/SDL2-2.0.10/include
 
-INCLUDEPATH =   $$LIBDIR/SDL2_image-2.0.5/include \
-                $$LIBDIR/SDL2-2.0.10/include
+    LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
+    LIBS += -L$$LIBDIR/SDL2-2.0.10/lib/x86/ -lSDL2main -lSDL2
 
-LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
-LIBS += -L$$LIBDIR/SDL2-2.0.10/lib/x86/ -lSDL2main -lSDL2
+} else{
+    # Linux build config
+    INCLUDEPATH += /usr/include/SDL2 \
+                   /usr/local/include/SDL2
+
+    LIBS += -Lusr/lib -lSDL2 -lSDL2main
+    LIBS += -Lusr/local/lib -lSDL2_image
+}
+
