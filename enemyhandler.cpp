@@ -4,7 +4,7 @@
 #include "enemyhandler.h"
 
 EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(3000), size_(30), min_hit_period_(1000)
+    spawn_period_(3000), size_(50), min_hit_period_(1000)
 {
   window_ = window;
   player_ = player;
