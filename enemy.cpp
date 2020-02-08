@@ -1,10 +1,11 @@
 #include "enemy.h"
 
-Enemy::Enemy(SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity)
+Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity)
     : GameObject(rend, texture_path, initial_dest_rect), dead_(false){
 
   velocity_ = initial_velocity;
   window_ = window;
+  type_ = enemy_type;
   circle_.ctr.x = initial_dest_rect.x + initial_dest_rect.w/2.0;
   circle_.ctr.y = initial_dest_rect.y + initial_dest_rect.h/2.0;
   circle_.rad = initial_dest_rect.w/2.0;
@@ -52,7 +53,9 @@ bool Enemy::isDead(){
 }
  //Doesn't acutally need its own functino for this - could set dead in Clean
 void Enemy::setDead(bool dead){
-  dead_ = dead;
+  if(type_ != TEST){
+    dead_ = dead;
+  }
 }
 
 Physics::Circle Enemy::GetCircle(){

@@ -67,25 +67,34 @@ bool Physics::CollisionCircleCircle(const Circle &c1, const Circle &c2){
  */
 
 bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle &c){
-  //p1 is their a
-  //p2 is their b
-  //c2.centre is their p
-  float dist_from_line;
+
+  std::cout << "Checking collision... ";
 
   Vec2D ray_vec = p2-p1;
   Vec2D vec_to_start = p1 - c.ctr;
 
-  float proj_on_ray = Dot(ray_vec, vec_to_start);
-
-  //closest point on line is ray start
-  if(proj_on_ray > 0){
-    dist_from_line = Length(vec_to_start);
-    if(dist_from_line < c.rad){
-      return true;
-    } else{
-      return false;
-    }
+  //initial check
+  if(Dot(ray_vec,vec_to_start) > 0){
+    //enemy "behind" player - so don't bother checking
+    std::cout << "wrong side." <<std::endl;
+    return false;
   }
+  std::cout << "right side... ";
+//  Normalize(ray_vec);
+
+//  float dist = Length(vec_to_start - ray_vec*Dot(vec_to_start,ray_vec));
+
+//  if(dist < c.rad){
+//    std::cout << "Collision!" << std::endl;
+//    return true;
+//  }
+
+  //Should be able to use simple point to line
+
+
+  float dist_from_line;
+
+  float proj_on_ray = Dot(ray_vec, vec_to_start);
 
   Vec2D vec_from_end = c.ctr - p2;
 
@@ -93,6 +102,7 @@ bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle 
   if(Dot(ray_vec, vec_from_end) > 0){
     dist_from_line = Length(vec_from_end);
     if(dist_from_line < c.rad){
+      std::cout << "Collision!" << std::endl;
       return true;
     }else{
       return false;
@@ -103,9 +113,10 @@ bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle 
   Vec2D e = vec_to_start - ray_vec * ( proj_on_ray / Dot(ray_vec, ray_vec));
 
   if(Length(e) < c.rad){
+    std::cout << "Collision!" << std::endl;
     return true;
   }
-
+  std::cout << "no collision." << std::endl;
   return false;
 }
 

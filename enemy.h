@@ -7,7 +7,14 @@
 class Enemy : public GameObject
 {
 public:
-  Enemy(SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity);
+  enum TYPE{
+    TOWARD_MIDDLE = 0,
+    TEST,
+    TRACKING,
+    ZIGZAG
+  };
+
+  Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity);
 
   void Update() override;
   bool isOnScreen();
@@ -21,6 +28,7 @@ private:
   Physics::Vec2D velocity_;
   SDL_Window* window_;
   bool dead_;
+  TYPE type_;
 };
 
 #endif // ENEMY_H

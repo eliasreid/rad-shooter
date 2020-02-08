@@ -69,8 +69,7 @@ bool Game::Init(){
           physics_ = Physics();
           player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
           enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-//          SpawnEnemy();
-
+          paused_=true;
 
           //Hide mouses - leave mouse on for development
 //          SDL_ShowCursor(SDL_DISABLE);
@@ -108,11 +107,7 @@ void Game::HandleEvents(){
 void Game::Update(){
   player_->Update();
   enemy_handler_->Update();
-//  for(auto enemy: enemies_) {
-//    enemy->Update();
-//  }
 
-  physics_.UpdateTime();
 }
 
 void Game::Render(){
@@ -120,10 +115,6 @@ void Game::Render(){
   SDL_RenderClear(renderer_);
   player_->Render();
   enemy_handler_->Render();
-//  for(auto enemy: enemies_) {
-//    enemy->Render();
-//  }
-
   SDL_RenderPresent(renderer_);
 }
 
@@ -131,14 +122,13 @@ void Game::GameLoop(){
   HandleEvents();
   if(!paused_){
     Update();
-
   }
+  physics_.UpdateTime();
   Render();
 }
 
 void Game::Close(){
   player_->Clean();
-
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;
   SDL_DestroyWindow(window_);

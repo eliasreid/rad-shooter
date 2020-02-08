@@ -4,7 +4,7 @@
 #include "enemyhandler.h"
 
 EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(3000), size_(50), min_hit_period_(1000)
+                                                                                         spawn_period_(1000000), size_(50), min_hit_period_(1000), is_spawning_(true), shot_(false)
 {
   window_ = window;
   player_ = player;
@@ -12,6 +12,8 @@ EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* p
 
   prev_spawn_time_ = std::chrono::high_resolution_clock::now();
   prev_hit_time_ = std::chrono::high_resolution_clock::now(); // doing this means he player can't be hit until min_hit_period_ has elapsed
+
+  SpawnEnemy(Enemy::TEST, 0.1);
 }
 
 EnemyHandler::~EnemyHandler()
@@ -33,11 +35,16 @@ void EnemyHandler::HandleEvents(SDL_Event &e){
 
 void EnemyHandler::Update(){
 
-  std::vector<void*> to_remove; // save pointers to elements that should be removed.
-
   for(auto &e : enemies_){
+    e->Update();
 
-    if(shot_){
+    //Check for out of bounds
+    if(!e->isOnScreen()){
+      e->Clean();
+      e->setDead(true);
+    }
+
+    if(!e->isDead() && shot_){
       Physics::Vec2D ray_start;
       Physics::Vec2D ray_end;
       player_->RayPoints(ray_start, ray_end);
@@ -49,14 +56,8 @@ void EnemyHandler::Update(){
       }
     }
 
-    //Check for out of bounds
-    if(!e->isOnScreen()){
-      e->Clean();
-      e->setDead(true);
-    }
-
-//    check for collision with player
-    if(Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
+    // check for collision with player
+    if(!e->isDead() && Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
       auto current_time = std::chrono::high_resolution_clock::now();
       auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time-prev_hit_time_).count();
 
@@ -78,17 +79,13 @@ void EnemyHandler::Update(){
         enemies_.end()
       );
 
-  for(auto &e : enemies_){
-    e->Update();
-  }
-
   //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
     auto current_time = std::chrono::high_resolution_clock::now();
     auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_spawn_time_).count();
 
     if(time_since_prev > spawn_period_){
-      SpawnEnemy(EnemyHandler::TOWARD_MIDDLE, 0.1);
+      SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
       prev_spawn_time_ = current_time;
     }
   }
@@ -102,8 +99,7 @@ void EnemyHandler::Render(){
 
 }
 
-
-void EnemyHandler::SpawnEnemy(TYPE type, float speed){
+void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float speed){
 
   SDL_Rect spawn_rect;
   spawn_rect.w = size_;
@@ -135,17 +131,19 @@ void EnemyHandler::SpawnEnemy(TYPE type, float speed){
 
 
   Physics::Vec2D vel = {0.0, 0.0};
-
-  switch(type){
-  case EnemyHandler::TOWARD_MIDDLE:
+  switch(enemy_type){
+  case Enemy::TOWARD_MIDDLE:
     //position of screen centre - position of enemy centre
     vel = Physics::Vec2D(screen_width / 2, screen_height / 2) - Physics::Centre(spawn_rect);
     Physics::Normalize(vel);
     break;
+  case Enemy::TEST:
+    spawn_rect.x = screen_width/2;
+    spawn_rect.y = screen_height/2;
   default:
     break;
   }
 
-  enemies_.push_back(new Enemy(renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel*speed));
+  enemies_.push_back(new Enemy(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel*speed));
 }
 
