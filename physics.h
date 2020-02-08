@@ -22,8 +22,14 @@ public:
     Vec2D operator+(const Vec2D &other){
       return Vec2D(x+other.x, y+other.y);
     }
-    Vec2D operator-(const Vec2D &other){
-      return Vec2D(x-other.x, y-other.y);
+    Vec2D operator-(const Vec2D &other) {
+        return Vec2D(x-other.x, y-other.y);
+    }
+    Vec2D operator+(const Vec2D &other) const{
+        return Vec2D(x+other.x, y+other.y);
+    }
+    Vec2D operator-(const Vec2D &other) const{
+        return Vec2D(x-other.x, y-other.y);
     }
     //Scaling
     Vec2D operator*(float s){
@@ -32,6 +38,11 @@ public:
     Vec2D operator/(float s){
       return Vec2D(x/s, y/s);
     }
+  };
+
+  struct Circle{
+      Vec2D ctr;
+      float rad;
   };
 
   void UpdateTime();
@@ -46,6 +57,10 @@ public:
   static float Length(const Vec2D &vec);
   static float Length(float x, float y);
   static Vec2D Centre(SDL_Rect r);
+
+  static bool CollisionCircleCircle(const Circle &c1, const Circle &c2);
+  static bool CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle &c);
+  static float Dot(const Vec2D &p1, const Vec2D &p2);
 
 private:
   std::chrono::high_resolution_clock::time_point prev_time;

@@ -100,6 +100,7 @@ void Game::HandleEvents(){
       running_ = false;
     } else{
       player_->HandleEvents(e);
+      enemy_handler_->HandleEvents(e);
     }
   }
 }

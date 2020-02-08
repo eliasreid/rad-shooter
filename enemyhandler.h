@@ -20,8 +20,8 @@ public:
     ZIGZAG
   };
 
-  void PlayerShot();
-  void Init();
+  void Init();\
+  void HandleEvents(SDL_Event& e);
   void Update();
   void Render();
   void SpawnEnemy(TYPE type, float speed);
@@ -38,6 +38,7 @@ private:
   std::vector<Enemy*> enemies_;
   bool is_spawning_;
   unsigned int spawn_period_;
+  unsigned int min_hit_period_;
   int size_;
   bool shot_;
   SDL_Window* window_;
@@ -45,6 +46,7 @@ private:
   SDL_Renderer* renderer_;
 
   std::chrono::high_resolution_clock::time_point  prev_spawn_time_;
+  std::chrono::high_resolution_clock::time_point  prev_hit_time_;
 
 };
 

@@ -3,13 +3,15 @@
 #include <iostream>
 #include "enemyhandler.h"
 
-EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) : spawn_period_(500), size_(30)
+EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
+    spawn_period_(3000), size_(30), min_hit_period_(1000)
 {
   window_ = window;
   player_ = player;
   renderer_ = renderer;
 
   prev_spawn_time_ = std::chrono::high_resolution_clock::now();
+  prev_hit_time_ = std::chrono::high_resolution_clock::now(); // doing this means he player can't be hit until min_hit_period_ has elapsed
 }
 
 EnemyHandler::~EnemyHandler()
@@ -23,6 +25,12 @@ void EnemyHandler::Init(){
   //start timer.
 }
 
+void EnemyHandler::HandleEvents(SDL_Event &e){
+  if(e.type == SDL_MOUSEBUTTONDOWN){
+    shot_ = true;
+  }
+}
+
 void EnemyHandler::Update(){
 
   std::vector<void*> to_remove; // save pointers to elements that should be removed.
@@ -30,31 +38,36 @@ void EnemyHandler::Update(){
   for(auto &e : enemies_){
 
     if(shot_){
+      Physics::Vec2D ray_start;
+      Physics::Vec2D ray_end;
+      player_->RayPoints(ray_start, ray_end);
+
       //check ray collision
-      //      Physics::CollisionRayCircle()
-      if(true){
-//        to_remove.push_back(e);
+
+      if(Physics::CollisionRayCircle(ray_start,ray_end, e->GetCircle())){
+        e->setDead(true);
       }
-      shot_ = false;
     }
 
     //Check for out of bounds
     if(!e->isOnScreen()){
       e->Clean();
-      e->setDead(true); //
-//      to_remove.push_back(e);
-      std::cout << "Killed enemy (off screen)" << std::endl; // working, I am setting them dead
+      e->setDead(true);
     }
 
-    //check for collision with player
-    //      Physics::CollisionCircleCircle()
-//    if(true){
-//      player_->Damage();
-//    }
+//    check for collision with player
+    if(Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
+      auto current_time = std::chrono::high_resolution_clock::now();
+      auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time-prev_hit_time_).count();
+
+      if(time_since_prev > min_hit_period_){
+        player_->Damage();
+        prev_hit_time_ = current_time;
+      }
+
+    }
   }
-
-  //Is this working?
-
+  shot_ = false;
 
   enemies_.erase(
       std::remove_if(
@@ -65,15 +78,6 @@ void EnemyHandler::Update(){
         enemies_.end()
       );
 
-  std::cout << "There is "<<enemies_.size() << " enemies being handled rn."<<std::endl;
-
-  //second loop to delete the enemies with matching pointers.
-  //TODO (memory leak without this.)
-
-  //C++ has a remove if
-
-  //Update enemies that still exist
-
   for(auto &e : enemies_){
     e->Update();
   }
@@ -81,10 +85,10 @@ void EnemyHandler::Update(){
   //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
     auto current_time = std::chrono::high_resolution_clock::now();
-    auto time_since_prev_ = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_spawn_time_).count();
+    auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_spawn_time_).count();
 
-    if(time_since_prev_ > spawn_period_){
-      SpawnEnemy(EnemyHandler::TOWARD_MIDDLE, 0.001);
+    if(time_since_prev > spawn_period_){
+      SpawnEnemy(EnemyHandler::TOWARD_MIDDLE, 0.1);
       prev_spawn_time_ = current_time;
     }
   }

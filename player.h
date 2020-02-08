@@ -19,9 +19,11 @@ public:
   void Update() override;
   void Render() override;
   void Damage();
+  Physics::Circle GetCircle();
+  void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
 
 private:
-  Physics::Vec2D centre_;
+  Physics::Circle circle_;
   float ray_velocity_;
   float ray_angle_ = 45 *M_PI/180; // angle in radians - zero is up, clockwise is positive
   float ray_length_;

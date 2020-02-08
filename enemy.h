@@ -13,10 +13,11 @@ public:
   bool isOnScreen();
   bool isDead();
   void setDead(bool dead);
+  Physics::Circle GetCircle();
   //Doesn't need it's own Render function yet
 
 private:
-  Physics::Vec2D centre_;
+  Physics::Circle circle_;
   Physics::Vec2D velocity_;
   SDL_Window* window_;
   bool dead_;

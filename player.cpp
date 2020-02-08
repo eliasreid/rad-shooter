@@ -8,6 +8,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   int x_size, y_size;
   SDL_GetWindowSize(window_, &x_size, &y_size);
   ray_length_ = Physics::Length(x_size, y_size);
+  circle_.rad = initial_dest_rect.w/2.0;
 
   ray_velocity_ = 0.001; // will be an important gameplay parameter
 
@@ -22,9 +23,8 @@ void Player::HandleEvents(SDL_Event &e){
     SDL_GetMouseState(&x, &y);
 
     //player should be centered on mouse - used to update render rect in Update()
-    centre_.x = x;
-    centre_.y = y;
-
+    circle_.ctr.x = x;
+    circle_.ctr.y = y;
   }
 }
 
@@ -35,17 +35,20 @@ void Player::Update(){
   }
 
   //Update player's render destination rect
-  dest_rect.x = centre_.x - dest_rect.w/2;
-  dest_rect.y = centre_.y - dest_rect.h/2;
+  dest_rect.x = circle_.ctr.x - dest_rect.w/2;
+  dest_rect.y = circle_.ctr.y - dest_rect.h/2;
 
   //apply angular velocity to ray_angle.
+
+  //vecolity is working fine for enemies, but ray isn't updating properly.
+
   Physics::Move(ray_angle_, ray_velocity_);
   if(ray_angle_ > 360.0){
     ray_angle_ -= 360.0;
   }
 
   //Set ray start/endpoint based on new angle.
-  ray_start_ = centre_;
+  ray_start_ = circle_.ctr;
   ray_end_.x = ray_start_.x + ray_length_ * sin(ray_angle_);
   ray_end_.y = ray_start_.y - ray_length_ * cos(ray_angle_);
 }
@@ -66,3 +69,11 @@ void Player::Damage(){
   health_--;
 }
 
+Physics::Circle Player::GetCircle(){
+    return circle_;
+}
+
+void Player::RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2){
+  vec1 = circle_.ctr;
+  vec2 = ray_end_;
+}
