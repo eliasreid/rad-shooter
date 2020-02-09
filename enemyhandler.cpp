@@ -4,7 +4,7 @@
 #include "enemyhandler.h"
 
 EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-                                                                                         spawn_period_(1000000), size_(50), min_hit_period_(1000), is_spawning_(true), shot_(false)
+    spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), shot_(false)
 {
   window_ = window;
   player_ = player;
@@ -13,7 +13,7 @@ EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* p
   prev_spawn_time_ = std::chrono::high_resolution_clock::now();
   prev_hit_time_ = std::chrono::high_resolution_clock::now(); // doing this means he player can't be hit until min_hit_period_ has elapsed
 
-  SpawnEnemy(Enemy::TEST, 0.1);
+  SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
 }
 
 EnemyHandler::~EnemyHandler()
