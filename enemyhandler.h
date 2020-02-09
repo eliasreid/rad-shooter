@@ -14,17 +14,11 @@ public:
   EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player);
   ~EnemyHandler();
 
-  enum TYPE{ // TODO: should belong to Enemy, not EnemyHandler
-    TOWARD_MIDDLE = 0,
-    TRACKING,
-    ZIGZAG
-  };
-
-  void Init();\
+  void Init();
   void HandleEvents(SDL_Event& e);
   void Update();
   void Render();
-  void SpawnEnemy(TYPE type, float speed);
+  void SpawnEnemy(Enemy::TYPE type, float speed);
 
 private:
 

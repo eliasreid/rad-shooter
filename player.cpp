@@ -10,7 +10,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   ray_length_ = Physics::Length(x_size, y_size);
   circle_.rad = initial_dest_rect.w/2.0;
 
-  ray_velocity_ = 0.001; // will be an important gameplay parameter
+  ray_velocity_ = 0.0001; // will be an important gameplay parameter
 
   health_ = 2;
 
@@ -30,8 +30,9 @@ void Player::HandleEvents(SDL_Event &e){
 
 void Player::Update(){
 
-  if(health_ < 1){
+  if(health_ == 0){
     std::cout << "player's health has reached zero!" << std::endl;
+    health_=-1;
   }
 
   //Update player's render destination rect
