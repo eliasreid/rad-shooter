@@ -4,7 +4,7 @@
 #include "enemyhandler.h"
 
 EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(3000), size_(50), min_hit_period_(1000)
+    spawn_period_(1000), size_(50), min_hit_period_(1000)
 {
   window_ = window;
   player_ = player;
@@ -12,6 +12,8 @@ EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* p
 
   prev_spawn_time_ = std::chrono::high_resolution_clock::now();
   prev_hit_time_ = std::chrono::high_resolution_clock::now(); // doing this means he player can't be hit until min_hit_period_ has elapsed
+
+  SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
 }
 
 EnemyHandler::~EnemyHandler()
@@ -33,11 +35,16 @@ void EnemyHandler::HandleEvents(SDL_Event &e){
 
 void EnemyHandler::Update(){
 
-  std::vector<void*> to_remove; // save pointers to elements that should be removed.
-
   for(auto &e : enemies_){
+    e->Update();
 
-    if(shot_){
+    //Check for out of bounds
+    if(!e->isOnScreen()){
+      e->Clean();
+      e->setDead(true);
+    }
+
+    if(!e->isDead() && shot_){
       Physics::Vec2D ray_start;
       Physics::Vec2D ray_end;
       player_->RayPoints(ray_start, ray_end);
@@ -49,14 +56,8 @@ void EnemyHandler::Update(){
       }
     }
 
-    //Check for out of bounds
-    if(!e->isOnScreen()){
-      e->Clean();
-      e->setDead(true);
-    }
-
-//    check for collision with player
-    if(Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
+    // check for collision with player
+    if(!e->isDead() && Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
       auto current_time = std::chrono::high_resolution_clock::now();
       auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time-prev_hit_time_).count();
 
