@@ -25,11 +25,13 @@ win32 {
     # Windows build config
     LIBDIR = G:/vsdevlib
 
-    INCLUDEPATH =   $$LIBDIR/SDL2_image-2.0.5/include \
-                    $$LIBDIR/SDL2-2.0.10/include
+    INCLUDEPATH =   $$LIBDIR/SDL2-2.0.10/include \
+                    $$LIBDIR/SDL2_image-2.0.5/include \
+                    $$LIBDIR/SDL2_ttf-2.0.15/include \
 
-    LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
     LIBS += -L$$LIBDIR/SDL2-2.0.10/lib/x86/ -lSDL2main -lSDL2
+    LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
+    LIBS += -L$$LIBDIR/SDL2_ttf-2.0.15/lib/x86/ -lSDL2_ttf
 
 } else{
     # Linux build config
