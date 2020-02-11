@@ -3,23 +3,23 @@ CONFIG += console
 TARGET = radshooter
 
 HEADERS = \
-    enemy.h \
-    enemyhandler.h \
-    game.h \
-    gameobject.h \
-    physics.h \
-    player.h \
-    timer.h
+    $$PWD/src/enemy.h \
+    $$PWD/src/enemyhandler.h \
+    $$PWD/src/game.h \
+    $$PWD/src/gameobject.h \
+    $$PWD/src/physics.h \
+    $$PWD/src/player.h \
+    $$PWD/src/timer.h
 
 SOURCES = \
-   $$PWD/main.cpp \
-   enemy.cpp \
-   enemyhandler.cpp \
-   game.cpp \
-   gameobject.cpp \
-   physics.cpp \
-   player.cpp \
-   timer.cpp
+   $$PWD/src/main.cpp \
+   $$PWD/src/enemy.cpp \
+   $$PWD/src/enemyhandler.cpp \
+   $$PWD/src/game.cpp \
+   $$PWD/src/gameobject.cpp \
+   $$PWD/src/physics.cpp \
+   $$PWD/src/player.cpp \
+   $$PWD/src/timer.cpp
 
 win32 {
     # Windows build config
