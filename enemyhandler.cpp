@@ -9,11 +9,6 @@ EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* p
   window_ = window;
   player_ = player;
   renderer_ = renderer;
-
-  prev_spawn_time_ = std::chrono::high_resolution_clock::now();
-  prev_hit_time_ = std::chrono::high_resolution_clock::now(); // doing this means he player can't be hit until min_hit_period_ has elapsed
-
-  SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
 }
 
 EnemyHandler::~EnemyHandler()
@@ -24,12 +19,26 @@ EnemyHandler::~EnemyHandler()
 }
 
 void EnemyHandler::Init(){
-  //start timer.
+  spawn_timer_.Init(1000);
+  damage_timer_.Init(1000); // This gives player 1 sec of invinsibilty at the start, and after gets hit
+  SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
+}
+
+void EnemyHandler::PauseSw(){
+  spawn_timer_.PauseSw();
+  damage_timer_.PauseSw();
 }
 
 void EnemyHandler::HandleEvents(SDL_Event &e){
   if(e.type == SDL_MOUSEBUTTONDOWN){
     shot_ = true;
+  }
+
+  if(e.type == SDL_KEYDOWN){
+    switch(e.key.keysym.sym){
+    case SDLK_ESCAPE:
+      PauseSw();
+    }
   }
 }
 
@@ -58,12 +67,9 @@ void EnemyHandler::Update(){
 
     // check for collision with player
     if(!e->isDead() && Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
-      auto current_time = std::chrono::high_resolution_clock::now();
-      auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time-prev_hit_time_).count();
-
-      if(time_since_prev > min_hit_period_){
+      if(damage_timer_.CheckTimeout() == true){
+        //TODO: set blinking for visual feedback of damage / invincibility
         player_->Damage();
-        prev_hit_time_ = current_time;
       }
 
     }
@@ -81,12 +87,8 @@ void EnemyHandler::Update(){
 
   //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
-    auto current_time = std::chrono::high_resolution_clock::now();
-    auto time_since_prev = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_spawn_time_).count();
-
-    if(time_since_prev > spawn_period_){
+    if(spawn_timer_.CheckTimeout()){
       SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
-      prev_spawn_time_ = current_time;
     }
   }
 
@@ -96,7 +98,6 @@ void EnemyHandler::Render(){
   for(auto &e : enemies_){
     e->Render();
   }
-
 }
 
 void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float speed){

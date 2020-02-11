@@ -69,7 +69,8 @@ bool Game::Init(){
           physics_ = Physics();
           player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
           enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-          paused_=true;
+          enemy_handler_->Init();
+//          paused_=true;
 
           //Hide mouses - leave mouse on for development
 //          SDL_ShowCursor(SDL_DISABLE);
