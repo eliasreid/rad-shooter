@@ -20,12 +20,9 @@ void Physics::UpdateTime(){
   auto current_time = std::chrono::high_resolution_clock::now();
   frametime_ms = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - prev_time).count();
   prev_time = current_time;
-//  std::cout << "frametime: " << frametime_ms;
 }
 
 void Physics::Normalize(Vec2D &vec){
-  //calc length, divide both elements by that length
-
   vec = vec / Length(vec);
 }
 
@@ -58,65 +55,30 @@ bool Physics::CollisionCircleCircle(const Circle &c1, const Circle &c2){
  * @param p2 - end of line segment
  * @param c2 - circle to check collision with
  *
- * This is acutally over complicated. dont need to consider line segment
- * can just check that the enemy is not "behind" the player, then just
- * distance from line (described by two points (on wikipedia)
- * https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+ * Doesn't work for arbitrary line segment - assumes that closest point on
+ * ray to enemy is never the start / end point. ok to do in our case
  *
  * @return
  */
 
 bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle &c){
 
-  std::cout << "Checking collision... ";
-
   Vec2D ray_vec = p2-p1;
   Vec2D vec_to_start = p1 - c.ctr;
 
-  //initial check
   if(Dot(ray_vec,vec_to_start) > 0){
     //enemy "behind" player - so don't bother checking
-    std::cout << "wrong side." <<std::endl;
     return false;
   }
-  std::cout << "right side... ";
-//  Normalize(ray_vec);
-
-//  float dist = Length(vec_to_start - ray_vec*Dot(vec_to_start,ray_vec));
-
-//  if(dist < c.rad){
-//    std::cout << "Collision!" << std::endl;
-//    return true;
-//  }
-
-  //Should be able to use simple point to line
-
 
   float dist_from_line;
-
   float proj_on_ray = Dot(ray_vec, vec_to_start);
-
   Vec2D vec_from_end = c.ctr - p2;
 
-  //closest point on line is ray end
-  if(Dot(ray_vec, vec_from_end) > 0){
-    dist_from_line = Length(vec_from_end);
-    if(dist_from_line < c.rad){
-      std::cout << "Collision!" << std::endl;
-      return true;
-    }else{
-      return false;
-    }
-  }
-
-  //so closest point is actually between
   Vec2D e = vec_to_start - ray_vec * ( proj_on_ray / Dot(ray_vec, ray_vec));
-
   if(Length(e) < c.rad){
-    std::cout << "Collision!" << std::endl;
     return true;
   }
-  std::cout << "no collision." << std::endl;
   return false;
 }
 
