@@ -8,7 +8,8 @@ HEADERS = \
     game.h \
     gameobject.h \
     physics.h \
-    player.h
+    player.h \
+    timer.h
 
 SOURCES = \
    $$PWD/main.cpp \
@@ -17,7 +18,8 @@ SOURCES = \
    game.cpp \
    gameobject.cpp \
    physics.cpp \
-   player.cpp
+   player.cpp \
+   timer.cpp
 
 win32 {
     # Windows build config

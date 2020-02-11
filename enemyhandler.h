@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "physics.h"
 #include "player.h"
+#include "timer.h"
 
 class EnemyHandler
 {
@@ -18,6 +19,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update();
   void Render();
+  void PauseSw();
   void SpawnEnemy(Enemy::TYPE type, float speed);
 
 private:
@@ -35,6 +37,8 @@ private:
   unsigned int min_hit_period_;
   int size_;
   bool shot_;
+  Timer spawn_timer_;
+  Timer damage_timer_;
   SDL_Window* window_;
   Player* player_;
   SDL_Renderer* renderer_;
