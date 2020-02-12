@@ -57,7 +57,7 @@ bool Game::Init(){
         } else{
 
           if(TTF_Init() == -1){
-            std::cerr<<"SDL_ttfe could not initialize! SDL_ttf Error: " << TTF_GetError()<<std::endl;
+            std::cerr<<"SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError()<<std::endl;
             success = false;
           }else{
 
@@ -74,11 +74,7 @@ bool Game::Init(){
             physics_ = Physics();
             player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
             enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-            SDL_Rect health_text_rect = {0,
-                                         0,
-                                         50,
-                                         20};
-            health_text_ = new TextBox(renderer_,"test",health_text_rect);
+            health_text_ = new TextBox(renderer_,"Health: 2", 0, 0);
 
 
             enemy_handler_->Init();

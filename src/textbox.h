@@ -1,15 +1,15 @@
 #ifndef TEXTBOX_H
 #define TEXTBOX_H
-
+#include <string>
 #include <SDL_ttf.h>
-#include "gameobject.h"
 
 class TextBox
 {
 public:
-  TextBox(SDL_Renderer* rend, std::string initial_text, SDL_Rect intial_dest_rect);
+  TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_pos);
 
-  void Update();
+  void UpdateText(std::string new_text, int font_size =0);
+  void UpdatePos(int x_pos, int y_pos);
   void Render();
   void Clean();
 
@@ -19,7 +19,7 @@ private:
 
   SDL_Renderer* renderer_;
   SDL_Texture* texture_;
-  SDL_Rect dest_rect;
+  SDL_Rect dest_rect_;
 };
 
 #endif // TEXTBOX_H
