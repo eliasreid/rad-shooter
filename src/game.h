@@ -1,12 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
+#include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <vector>
 #include "gameobject.h"
 #include "player.h"
 #include "enemy.h"
 #include "enemyhandler.h"
+#include "textbox.h"
 
 class Game
 {
@@ -35,6 +36,8 @@ private:
   Physics physics_;
   Player* player_;
   EnemyHandler* enemy_handler_;
+  TextBox* health_text_;
+
 //  std::vector<Enemy*> enemies_;
 
   void SpawnEnemy();

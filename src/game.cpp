@@ -56,24 +56,33 @@ bool Game::Init(){
           success = false;
         } else{
 
-          //Create player with initial size / position.
-          const int player_x_size = 30;
-          const int player_y_size = 30;
+          if(TTF_Init() == -1){
+            std::cerr<<"SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError()<<std::endl;
+            success = false;
+          }else{
 
-          SDL_Rect player_init_rect = {window_width / 2  -  player_x_size / 2,
-                                        window_height / 2 - player_y_size / 2,
-                                       player_x_size,
-                                       player_y_size};
+            //Create player with initial size / position.
+            const int player_x_size = 30;
+            const int player_y_size = 30;
 
-          //Instantiate physics and player
-          physics_ = Physics();
-          player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
-          enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-          enemy_handler_->Init();
-//          paused_=true;
+            SDL_Rect player_init_rect = {window_width / 2  -  player_x_size / 2,
+                                          window_height / 2 - player_y_size / 2,
+                                         player_x_size,
+                                         player_y_size};
 
-          //Hide mouses - leave mouse on for development
-//          SDL_ShowCursor(SDL_DISABLE);
+            //Instantiate physics and player
+            physics_ = Physics();
+            player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
+            enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
+            health_text_ = new TextBox(renderer_,"Health: 2", 0, 0);
+
+
+            enemy_handler_->Init();
+  //          paused_=true;
+
+            //Hide mouses - leave mouse on for development
+  //          SDL_ShowCursor(SDL_DISABLE);
+          }
         }
       }
     }
@@ -116,6 +125,7 @@ void Game::Render(){
   SDL_RenderClear(renderer_);
   player_->Render();
   enemy_handler_->Render();
+  health_text_->Render();
   SDL_RenderPresent(renderer_);
 }
 
@@ -130,11 +140,14 @@ void Game::GameLoop(){
 
 void Game::Close(){
   player_->Clean();
+  health_text_->Clean();
+//  enemy_handler_->Clean(); //TODO: need to implement this
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;
   SDL_DestroyWindow(window_);
   window_ = nullptr;
 
+  TTF_Quit();
   IMG_Quit();
   SDL_Quit();
 }

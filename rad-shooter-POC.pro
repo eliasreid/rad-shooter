@@ -9,7 +9,8 @@ HEADERS = \
     $$PWD/src/gameobject.h \
     $$PWD/src/physics.h \
     $$PWD/src/player.h \
-    $$PWD/src/timer.h
+    $$PWD/src/timer.h \
+    $$PWD/src/textbox.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -19,17 +20,20 @@ SOURCES = \
    $$PWD/src/gameobject.cpp \
    $$PWD/src/physics.cpp \
    $$PWD/src/player.cpp \
-   $$PWD/src/timer.cpp
+   $$PWD/src/timer.cpp \
+   $$PWD/src/textbox.cpp
 
 win32 {
     # Windows build config
     LIBDIR = G:/vsdevlib
 
-    INCLUDEPATH =   $$LIBDIR/SDL2_image-2.0.5/include \
-                    $$LIBDIR/SDL2-2.0.10/include
+    INCLUDEPATH =   $$LIBDIR/SDL2-2.0.10/include \
+                    $$LIBDIR/SDL2_image-2.0.5/include \
+                    $$LIBDIR/SDL2_ttf-2.0.15/include \
 
-    LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
     LIBS += -L$$LIBDIR/SDL2-2.0.10/lib/x86/ -lSDL2main -lSDL2
+    LIBS += -L$$LIBDIR/SDL2_image-2.0.5/lib/x86/ -lSDL2_image
+    LIBS += -L$$LIBDIR/SDL2_ttf-2.0.15/lib/x86/ -lSDL2_ttf
 
 } else{
     # Linux build config
