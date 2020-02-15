@@ -10,7 +10,7 @@ public:
   void AddObserver(Observer* new_observer);
   void RemoveObserver(Observer* observer_to_remove);
 protected:
-  void Notify();
+  void Notify(GameObject* obj, EVENT_TYPE event_type);
 private:
   std::vector<Observer *> observers_;
 

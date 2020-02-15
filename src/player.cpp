@@ -1,5 +1,6 @@
 #include <iostream>
 #include "player.h"
+#include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
   GameObject(rend, texture_path, initial_dest_rect) {
@@ -12,7 +13,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   ray_velocity_ = 0.0001; // will be an important gameplay parameter
 
-  health_ = hp;
+  health_remaining_ = hp;
 
 }
 
@@ -30,9 +31,9 @@ void Player::HandleEvents(SDL_Event &e){
 
 void Player::Update(){
 
-  if(health_ == 0){
+  if(health_remaining_ == 0){
     std::cout << "player's health has reached zero!" << std::endl;
-    health_=-1;
+    health_remaining_=-1; // not sure why im doing this
   }
 
   //Update player's render destination rect
@@ -66,20 +67,24 @@ void Player::Render(){
 }
 
 void Player::Damage(){
-  if(health_ > -1){
-    health_--;
-    Notify(); // should have the healthUI in it's list of observers, will call it's on notify
-    std::cout << "player has been damaged! health_ is now  " << health_ << std::endl;
+  if(health_remaining_ > -1){
+    health_remaining_--;
+    Notify(this, EVENT_TYPE::HEALTH_CHANGED); // should have the healthUI in it's list of observers, will call it's on notify
+    std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
   }else{
     std::cout << "Overkill!" << std::endl;
   }
 }
 
-Physics::Circle Player::GetCircle(){
+Physics::Circle Player::getCircle(){
     return circle_;
 }
 
 void Player::RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2){
   vec1 = circle_.ctr;
   vec2 = ray_end_;
+}
+
+int Player::getHealth(){
+  return health_remaining_;
 }
