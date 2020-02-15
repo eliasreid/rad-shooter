@@ -20,7 +20,7 @@ public:
   bool isOnScreen();
   bool isDead();
   void setDead(bool dead);
-  Physics::Circle GetCircle();
+  Physics::Circle getCircle();
   //Doesn't need it's own Render function yet
 
 private:

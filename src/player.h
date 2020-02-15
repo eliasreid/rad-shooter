@@ -20,7 +20,7 @@ public:
   void Update() override;
   void Render() override;
   void Damage();
-  Physics::Circle GetCircle();
+  Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
   int getHealth();
 
