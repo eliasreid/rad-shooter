@@ -6,14 +6,15 @@
 #include <chrono>
 #include "gameobject.h"
 #include "physics.h"
+#include "subject.h"
 
-class Player : public GameObject
+class Player : public GameObject, public Subject
 {
 public:
   //Probably belongs elsewhere
 
 
-  Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window);
+  Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp);
 
   void HandleEvents(SDL_Event& e);
   void Update() override;

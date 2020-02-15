@@ -1,7 +1,7 @@
 #include <iostream>
 #include "player.h"
 
-Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window) :
+Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
   GameObject(rend, texture_path, initial_dest_rect) {
 
   window_ = window;
@@ -12,7 +12,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   ray_velocity_ = 0.0001; // will be an important gameplay parameter
 
-  health_ = 2;
+  health_ = hp;
 
 }
 
@@ -66,8 +66,13 @@ void Player::Render(){
 }
 
 void Player::Damage(){
-  std::cout << "player has been damaged!" << std::endl;
-  health_--;
+  if(health_ > -1){
+    health_--;
+    Notify(); // should have the healthUI in it's list of observers, will call it's on notify
+    std::cout << "player has been damaged! health_ is now  " << health_ << std::endl;
+  }else{
+    std::cout << "Overkill!" << std::endl;
+  }
 }
 
 Physics::Circle Player::GetCircle(){

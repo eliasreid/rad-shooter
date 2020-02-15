@@ -72,11 +72,12 @@ bool Game::Init(){
 
             //Instantiate physics and player
             physics_ = Physics();
-            player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_);
+            player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_, 4);
             enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-            health_text_ = new TextBox(renderer_,"Health: 2", 0, 0);
+            health_text_ = new HealthUI(renderer_,"Health: 4", 0, 0);
 
 
+            player_->AddObserver(health_text_);
             enemy_handler_->Init();
   //          paused_=true;
 

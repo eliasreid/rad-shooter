@@ -11,6 +11,7 @@ HEADERS = \
     $$PWD/src/player.h \
     $$PWD/src/timer.h \
     $$PWD/src/textbox.h \
+    src/healthui.h \
     src/observer.h \
     src/subject.h
 
@@ -24,6 +25,7 @@ SOURCES = \
    $$PWD/src/player.cpp \
    $$PWD/src/timer.cpp \
    $$PWD/src/textbox.cpp \
+   src/healthui.cpp \
    src/observer.cpp \
    src/subject.cpp
 
