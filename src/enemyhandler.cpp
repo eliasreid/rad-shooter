@@ -4,7 +4,7 @@
 #include "enemyhandler.h"
 
 EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), shot_(false)
+    spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), player_shot_(false)
 {
   window_ = window;
   player_ = player;
@@ -30,9 +30,6 @@ void EnemyHandler::PauseSw(){
 }
 
 void EnemyHandler::HandleEvents(SDL_Event &e){
-  if(e.type == SDL_MOUSEBUTTONDOWN){
-    shot_ = true;
-  }
 
   if(e.type == SDL_KEYDOWN){
     switch(e.key.keysym.sym){
@@ -53,7 +50,7 @@ void EnemyHandler::Update(){
       e->setDead(true);
     }
 
-    if(!e->isDead() && shot_){
+    if(!e->isDead() && player_shot_){
       Physics::Vec2D ray_start;
       Physics::Vec2D ray_end;
       player_->RayPoints(ray_start, ray_end);
@@ -73,7 +70,7 @@ void EnemyHandler::Update(){
 
     }
   }
-  shot_ = false;
+  player_shot_ = false;
 
   enemies_.erase(
       std::remove_if(
@@ -99,7 +96,13 @@ void EnemyHandler::Render(){
   }
 }
 
-void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float speed){
+void EnemyHandler::Clean(){
+  for(auto &e : enemies_){
+    e->Clean();
+  }
+}
+
+void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
 
   SDL_Rect spawn_rect;
   spawn_rect.w = size_;
@@ -128,22 +131,40 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float speed){
   }
 
   //based on location, initilize velocoty to travel toward middle of screen
-
-
   Physics::Vec2D vel = {0.0, 0.0};
   switch(enemy_type){
   case Enemy::TOWARD_MIDDLE:
     //position of screen centre - position of enemy centre
     vel = Physics::Vec2D(screen_width / 2, screen_height / 2) - Physics::Centre(spawn_rect);
     Physics::Normalize(vel);
+    vel = vel * initial_speed;
     break;
   case Enemy::TEST:
     spawn_rect.x = screen_width/2;
     spawn_rect.y = screen_height/2;
+    //leave velocity as zero
   default:
     break;
   }
 
-  enemies_.push_back(new Enemy(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel*speed));
+  enemies_.push_back(new Enemy(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
+}
+
+/*
+ * This changes the timing of when ray collision is checked
+ * right now checking after enemies move, but here would be before
+ * So keep the player_shot_ bool, but set here instead of on mousepress
+*/
+
+void EnemyHandler::onNotify(GameObject *obj, EVENT_TYPE event_type){
+  //game object will be player
+  switch(event_type){
+  case EVENT_TYPE::PLAYER_SHOT:
+    player_shot_ = true;
+    break;
+  default:
+    break;
+  }
+
 }
 

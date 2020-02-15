@@ -19,6 +19,23 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
 void Player::HandleEvents(SDL_Event &e){
 
+  switch(e.type){
+  case SDL_MOUSEMOTION:{
+    int x, y;
+    SDL_GetMouseState(&x, &y);
+    //player should be centered on mouse - used to update render rect in Update()
+    circle_.ctr.x = x;
+    circle_.ctr.y = y;
+  } break;
+
+  case SDL_MOUSEBUTTONDOWN:
+    Notify(this, EVENT_TYPE::PLAYER_SHOT);
+    break;
+
+  default:
+    break;
+  }
+
   if(e.type == SDL_MOUSEMOTION){
     int x, y;
     SDL_GetMouseState(&x, &y);
@@ -41,9 +58,6 @@ void Player::Update(){
   dest_rect.y = circle_.ctr.y - dest_rect.h/2;
 
   //apply angular velocity to ray_angle.
-
-  //vecolity is working fine for enemies, but ray isn't updating properly.
-
   Physics::Move(ray_angle_, ray_velocity_);
   if(ray_angle_ > 360.0){
     ray_angle_ -= 360.0;
@@ -69,7 +83,7 @@ void Player::Render(){
 void Player::Damage(){
   if(health_remaining_ > -1){
     health_remaining_--;
-    Notify(this, EVENT_TYPE::HEALTH_CHANGED); // should have the healthUI in it's list of observers, will call it's on notify
+    Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
     std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
   }else{
     std::cout << "Overkill!" << std::endl;

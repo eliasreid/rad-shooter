@@ -78,6 +78,7 @@ bool Game::Init(){
 
 
             player_->AddObserver(health_text_);
+            player_->AddObserver(enemy_handler_);
             enemy_handler_->Init();
   //          paused_=true;
 
@@ -102,7 +103,7 @@ void Game::HandleEvents(){
     if(e.type == SDL_KEYDOWN){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
-        paused_ = !paused_;
+        paused_ = !paused_; //TODO send pause event to be handled by other classes.
       }
     }
 
@@ -142,7 +143,7 @@ void Game::GameLoop(){
 void Game::Close(){
   player_->Clean();
   health_text_->Clean();
-//  enemy_handler_->Clean(); //TODO: need to implement this
+  enemy_handler_->Clean();
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;
   SDL_DestroyWindow(window_);

@@ -8,8 +8,9 @@
 #include "physics.h"
 #include "player.h"
 #include "timer.h"
+#include "event.h"
 
-class EnemyHandler
+class EnemyHandler : public Observer
 {
 public:
   EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player);
@@ -19,6 +20,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update();
   void Render();
+  void Clean();
   void PauseSw();
   void SpawnEnemy(Enemy::TYPE type, float speed);
 
@@ -36,7 +38,7 @@ private:
   unsigned int spawn_period_;
   unsigned int min_hit_period_;
   int size_;
-  bool shot_;
+  bool player_shot_;
   Timer spawn_timer_;
   Timer damage_timer_;
   SDL_Window* window_;
@@ -45,6 +47,8 @@ private:
 
   std::chrono::high_resolution_clock::time_point  prev_spawn_time_;
   std::chrono::high_resolution_clock::time_point  prev_hit_time_;
+
+  void onNotify(GameObject *obj, EVENT_TYPE event_type) override;
 
 };
 

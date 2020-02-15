@@ -13,7 +13,7 @@ void HealthUI::onNotify(GameObject* obj, EVENT_TYPE event_type){
   std::stringstream new_text;
   auto player = dynamic_cast<Player*>(obj);
   switch(event_type){
-  case EVENT_TYPE::HEALTH_CHANGED:
+  case EVENT_TYPE::PLAYER_DAMAGED:
     new_text << "Health: " << player->getHealth();
     UpdateText(new_text.str());
     break;
