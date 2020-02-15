@@ -10,7 +10,9 @@ HEADERS = \
     $$PWD/src/physics.h \
     $$PWD/src/player.h \
     $$PWD/src/timer.h \
-    $$PWD/src/textbox.h
+    $$PWD/src/textbox.h \
+    src/observer.h \
+    src/subject.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -21,7 +23,9 @@ SOURCES = \
    $$PWD/src/physics.cpp \
    $$PWD/src/player.cpp \
    $$PWD/src/timer.cpp \
-   $$PWD/src/textbox.cpp
+   $$PWD/src/textbox.cpp \
+   src/observer.cpp \
+   src/subject.cpp
 
 win32 {
     # Windows build config
