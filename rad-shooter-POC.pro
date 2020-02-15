@@ -11,10 +11,10 @@ HEADERS = \
     $$PWD/src/player.h \
     $$PWD/src/timer.h \
     $$PWD/src/textbox.h \
-    event.h \
-    src/healthui.h \
-    src/observer.h \
-    src/subject.h
+    $$PWD/src/event.h \
+    $$PWD/src/healthui.h \
+    $$PWD/src/observer.h \
+    $$PWD/src/subject.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -26,9 +26,9 @@ SOURCES = \
    $$PWD/src/player.cpp \
    $$PWD/src/timer.cpp \
    $$PWD/src/textbox.cpp \
-   src/healthui.cpp \
-   src/observer.cpp \
-   src/subject.cpp
+   $$PWD/src/healthui.cpp \
+   $$PWD/src/observer.cpp \
+   $$PWD/src/subject.cpp
 
 win32 {
     # Windows build config
