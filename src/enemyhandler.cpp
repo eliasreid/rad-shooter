@@ -59,14 +59,13 @@ void EnemyHandler::Update(){
       player_->RayPoints(ray_start, ray_end);
 
       //check ray collision
-
-      if(Physics::CollisionRayCircle(ray_start,ray_end, e->GetCircle())){
+      if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
         e->setDead(true);
       }
     }
 
     // check for collision with player
-    if(!e->isDead() && Physics::CollisionCircleCircle(player_->getCircle(), e->GetCircle())){
+    if(!e->isDead() && Physics::CollisionCircleCircle(player_->getCircle(), e->getCircle())){
       if(damage_timer_.CheckTimeout() == true){
         //TODO: set blinking for visual feedback of damage / invincibility
         player_->Damage();
