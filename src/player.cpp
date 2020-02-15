@@ -15,6 +15,8 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   health_remaining_ = hp;
 
+  damage_timer_.Init(1000); // This gives player 1 sec of invinsibilty at the start, and after gets hit
+
 }
 
 void Player::HandleEvents(SDL_Event &e){
@@ -31,7 +33,11 @@ void Player::HandleEvents(SDL_Event &e){
   case SDL_MOUSEBUTTONDOWN:
     Notify(this, EVENT_TYPE::PLAYER_SHOT);
     break;
-
+  case SDL_KEYDOWN:
+    switch(e.key.keysym.sym){
+      case SDLK_ESCAPE:
+        damage_timer_.PauseSw();
+    }
   default:
     break;
   }
@@ -81,12 +87,15 @@ void Player::Render(){
 }
 
 void Player::Damage(){
-  if(health_remaining_ > -1){
-    health_remaining_--;
-    Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
-    std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
-  }else{
-    std::cout << "Overkill!" << std::endl;
+  if(damage_timer_.CheckTimeout() == true){
+
+    if(health_remaining_ > -1){
+      health_remaining_--;
+      Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
+      std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
+    }else{
+      std::cout << "Overkill!" << std::endl;
+    }
   }
 }
 

@@ -7,13 +7,12 @@
 #include "gameobject.h"
 #include "physics.h"
 #include "subject.h"
+#include "timer.h"
 
 class Player : public GameObject, public Subject
 {
 public:
   //Probably belongs elsewhere
-
-
   Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp);
 
   void HandleEvents(SDL_Event& e);
@@ -31,6 +30,7 @@ private:
   float ray_length_;
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
+  Timer damage_timer_;
 
   int health_remaining_;
 
