@@ -11,6 +11,7 @@ HEADERS = \
     $$PWD/src/player.h \
     $$PWD/src/timer.h \
     $$PWD/src/textbox.h \
+    event.h \
     src/healthui.h \
     src/observer.h \
     src/subject.h

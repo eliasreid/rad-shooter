@@ -20,8 +20,9 @@ public:
   void Update() override;
   void Render() override;
   void Damage();
-  Physics::Circle GetCircle();
+  Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
+  int getHealth();
 
 private:
   Physics::Circle circle_;
@@ -31,7 +32,7 @@ private:
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
 
-  int health_;
+  int health_remaining_;
 
   SDL_Window* window_;
 };

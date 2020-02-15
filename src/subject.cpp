@@ -21,11 +21,10 @@ void Subject::RemoveObserver(Observer *observer_to_remove){
   } else{
     std::cerr << "observer to remove doesn't exist" << std::endl;
   }
-
 }
 
-void Subject::Notify(){
+void Subject::Notify(GameObject* obj, EVENT_TYPE event_type){
   for(auto const obs : observers_){
-    obs->onNotify();
+    obs->onNotify(obj, event_type);
   }
 }

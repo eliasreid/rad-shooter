@@ -58,6 +58,6 @@ void Enemy::setDead(bool dead){
   }
 }
 
-Physics::Circle Enemy::GetCircle(){
+Physics::Circle Enemy::getCircle(){
     return circle_;
 }

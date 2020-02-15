@@ -66,7 +66,7 @@ void EnemyHandler::Update(){
     }
 
     // check for collision with player
-    if(!e->isDead() && Physics::CollisionCircleCircle(player_->GetCircle(), e->GetCircle())){
+    if(!e->isDead() && Physics::CollisionCircleCircle(player_->getCircle(), e->GetCircle())){
       if(damage_timer_.CheckTimeout() == true){
         //TODO: set blinking for visual feedback of damage / invincibility
         player_->Damage();
