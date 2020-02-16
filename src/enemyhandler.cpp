@@ -20,13 +20,11 @@ EnemyHandler::~EnemyHandler()
 
 void EnemyHandler::Init(){
   spawn_timer_.Init(1000);
-  damage_timer_.Init(1000); // This gives player 1 sec of invinsibilty at the start, and after gets hit
   SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
 }
 
 void EnemyHandler::PauseSw(){
   spawn_timer_.PauseSw();
-  damage_timer_.PauseSw();
 }
 
 void EnemyHandler::HandleEvents(SDL_Event &e){
@@ -63,11 +61,7 @@ void EnemyHandler::Update(){
 
     // check for collision with player
     if(!e->isDead() && Physics::CollisionCircleCircle(player_->getCircle(), e->getCircle())){
-      if(damage_timer_.CheckTimeout() == true){
-        //TODO: set blinking for visual feedback of damage / invincibility
-        player_->Damage();
-      }
-
+      player_->Damage();
     }
   }
   player_shot_ = false;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "subject.h"
 
 void Subject::AddObserver(Observer* new_observer){

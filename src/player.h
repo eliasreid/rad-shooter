@@ -7,18 +7,18 @@
 #include "gameobject.h"
 #include "physics.h"
 #include "subject.h"
+#include "timer.h"
 
 class Player : public GameObject, public Subject
 {
 public:
   //Probably belongs elsewhere
-
-
   Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp);
 
   void HandleEvents(SDL_Event& e);
   void Update() override;
   void Render() override;
+  void RenderLine(); // Maybe add args
   void Damage();
   Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
@@ -31,7 +31,10 @@ private:
   float ray_length_;
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
-
+  Timer invincibility_timer_;
+  Timer blink_timer_;
+  bool is_invincible;
+  bool is_visible_;
   int health_remaining_;
 
   SDL_Window* window_;

@@ -48,6 +48,6 @@ win32 {
                    /usr/local/include/SDL2
 
     LIBS += -Lusr/lib -lSDL2 -lSDL2main
-    LIBS += -Lusr/local/lib -lSDL2_image
+    LIBS += -Lusr/local/lib -lSDL2_image -lSDL2_ttf
 }
 

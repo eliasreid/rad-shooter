@@ -40,7 +40,6 @@ private:
   int size_;
   bool player_shot_;
   Timer spawn_timer_;
-  Timer damage_timer_;
   SDL_Window* window_;
   Player* player_;
   SDL_Renderer* renderer_;
