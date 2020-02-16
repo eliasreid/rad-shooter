@@ -31,7 +31,9 @@ void Player::HandleEvents(SDL_Event &e){
   } break;
 
   case SDL_MOUSEBUTTONDOWN:
-    Notify(this, EVENT_TYPE::PLAYER_SHOT);
+    //Only allow to shoot when not invincible
+    if(!is_invincible)
+      Notify(this, EVENT_TYPE::PLAYER_SHOT);
     break;
   case SDL_KEYDOWN:
     switch(e.key.keysym.sym){
