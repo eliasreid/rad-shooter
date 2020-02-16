@@ -18,6 +18,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update() override;
   void Render() override;
+  void RenderLine(); // Maybe add args
   void Damage();
   Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
@@ -30,8 +31,10 @@ private:
   float ray_length_;
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
-  Timer damage_timer_;
-  bool is_blinking_;
+  Timer invincibility_timer_;
+  Timer blink_timer_;
+  bool is_invincible;
+  bool is_visible_;
   int health_remaining_;
 
   SDL_Window* window_;

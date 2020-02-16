@@ -3,7 +3,7 @@
 #include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
-    GameObject(rend, texture_path, initial_dest_rect), is_blinking_(false) {
+  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true) {
 
   window_ = window;
   int x_size, y_size;
@@ -15,7 +15,8 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   health_remaining_ = hp;
 
-  damage_timer_.Init(1000, true);
+  invincibility_timer_.Init(1000, true);
+  blink_timer_.Init(80);
 }
 
 void Player::HandleEvents(SDL_Event &e){
@@ -35,7 +36,7 @@ void Player::HandleEvents(SDL_Event &e){
   case SDL_KEYDOWN:
     switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
-        damage_timer_.PauseSw();
+        invincibility_timer_.PauseSw();
     }
   default:
     break;
@@ -69,22 +70,38 @@ void Player::Update(){
 }
 
 void Player::Render(){
-  //Basic rendering. Renders texture to screen at dest_rect
 
-  //alternate whether to render here, based on blink_timer_
-  GameObject::Render();
-
-  //Additional rendering for player class
-
-  //Render ray cursor
+  //If player is invincible, need additional checks and a timer to blink every X time interval
+  if(is_invincible){
+    // keep checking until returns true, then reset invinsibility timer - start timed out
+    if(!invincibility_timer_.CheckTimeout()){
+      if(blink_timer_.CheckTimeout()){
+        is_visible_ = !is_visible_;
+      }
+      if(is_visible_){
+        GameObject::Render();
+        RenderLine();
+      }
+    } else{
+      is_invincible = false;
+      is_visible_ = true;
+      invincibility_timer_.Reset(true);
+    }
+  } else{
+    //render normally
+    GameObject::Render();
+    RenderLine();
+  }
+}
+void Player::RenderLine(){
   SDL_SetRenderDrawColor(renderer_,0,0,0,255);
   SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
 }
 
 void Player::Damage(){
-  if(damage_timer_.CheckTimeout()){
+  if(invincibility_timer_.CheckTimeout()){
+    is_invincible = true;
     if(health_remaining_ > 0){
-      is_blinking_ = true;
       health_remaining_--;
       Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
       std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
