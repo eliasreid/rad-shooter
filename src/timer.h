@@ -17,9 +17,10 @@ class Timer
 public:
   Timer();
 
-  void Init(unsigned int period_ms, bool is_active = true);
-  void SetActive(bool is_active);
-  void Reset();
+  void Init(unsigned int period_ms, bool start_timedout = false);
+  void setActive(bool is_active);
+  bool getActive();
+  void Reset(bool start_timedout = false);
   bool CheckTimeout();
   void PauseSw();
 

@@ -3,7 +3,7 @@
 #include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
-  GameObject(rend, texture_path, initial_dest_rect) {
+    GameObject(rend, texture_path, initial_dest_rect), is_blinking_(false) {
 
   window_ = window;
   int x_size, y_size;
@@ -15,8 +15,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   health_remaining_ = hp;
 
-  damage_timer_.Init(1000); // This gives player 1 sec of invinsibilty at the start, and after gets hit
-
+  damage_timer_.Init(1000, true);
 }
 
 void Player::HandleEvents(SDL_Event &e){
@@ -53,12 +52,6 @@ void Player::HandleEvents(SDL_Event &e){
 }
 
 void Player::Update(){
-
-  if(health_remaining_ == 0){
-    std::cout << "player's health has reached zero!" << std::endl;
-    health_remaining_=-1; // not sure why im doing this
-  }
-
   //Update player's render destination rect
   dest_rect.x = circle_.ctr.x - dest_rect.w/2;
   dest_rect.y = circle_.ctr.y - dest_rect.h/2;
@@ -77,6 +70,8 @@ void Player::Update(){
 
 void Player::Render(){
   //Basic rendering. Renders texture to screen at dest_rect
+
+  //alternate whether to render here, based on blink_timer_
   GameObject::Render();
 
   //Additional rendering for player class
@@ -87,9 +82,9 @@ void Player::Render(){
 }
 
 void Player::Damage(){
-  if(damage_timer_.CheckTimeout() == true){
-
-    if(health_remaining_ > -1){
+  if(damage_timer_.CheckTimeout()){
+    if(health_remaining_ > 0){
+      is_blinking_ = true;
       health_remaining_--;
       Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
       std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;

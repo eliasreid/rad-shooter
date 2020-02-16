@@ -5,17 +5,19 @@ Timer::Timer() : is_active_(false), is_init_(false), is_paused_(false)
 
 }
 
-void Timer::Init(unsigned int period_ms, bool is_active){
+void Timer::Init(unsigned int period_ms, bool start_timedout_){
   is_init_ = true;
   period_ms_ = period_ms;
-  is_active_ = is_active;
-  if(is_active){
-    //start timer
+  is_active_ = true;
+  if(start_timedout_){
+    //subtract period so first call to check_timeout will be true
+    prev_time_ = std::chrono::high_resolution_clock::now() - std::chrono::milliseconds(period_ms_);
+  }else {
     prev_time_ = std::chrono::high_resolution_clock::now();
   }
 }
 
-void Timer::SetActive(bool is_active){
+void Timer::setActive(bool is_active){
   if(is_init_){
     is_active_ = is_active;
 
@@ -24,6 +26,9 @@ void Timer::SetActive(bool is_active){
       prev_time_ = std::chrono::high_resolution_clock::now();
     }
   }
+}
+bool Timer::getActive(){
+  return is_active_;
 }
 
 bool Timer::CheckTimeout(){
@@ -46,9 +51,14 @@ bool Timer::CheckTimeout(){
   return ret;
 }
 
-void Timer::Reset(){
+void Timer::Reset(bool start_timedout){
   if(is_active_){
-    prev_time_ = std::chrono::high_resolution_clock::now();
+    if(start_timedout){
+      //subtract period so first call to check_timeout will be true
+      prev_time_ = std::chrono::high_resolution_clock::now() - std::chrono::milliseconds(period_ms_);
+    }else {
+      prev_time_ = std::chrono::high_resolution_clock::now();
+    }
   }
 }
 

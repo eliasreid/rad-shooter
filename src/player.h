@@ -31,7 +31,7 @@ private:
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
   Timer damage_timer_;
-
+  bool is_blinking_;
   int health_remaining_;
 
   SDL_Window* window_;
