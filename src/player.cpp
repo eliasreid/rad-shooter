@@ -39,6 +39,7 @@ void Player::HandleEvents(SDL_Event &e){
     switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
         invincibility_timer_.PauseSw();
+        blink_timer_.PauseSw();
     }
   default:
     break;
