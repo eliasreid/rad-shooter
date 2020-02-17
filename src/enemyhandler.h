@@ -3,12 +3,14 @@
 
 #include <vector>
 #include <chrono>
-
+#include <memory>
 #include "enemy.h"
 #include "physics.h"
 #include "player.h"
 #include "timer.h"
 #include "event.h"
+
+static const size_t MAX_ENEMIES = 100;
 
 class EnemyHandler : public Observer
 {
@@ -33,7 +35,7 @@ private:
     BOTTOM
   };
 
-  std::vector<Enemy*> enemies_;
+  std::vector<std::shared_ptr<Enemy>> enemies_;
   bool is_spawning_;
   unsigned int spawn_period_;
   unsigned int min_hit_period_;

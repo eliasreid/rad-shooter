@@ -11,7 +11,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   ray_length_ = Physics::Length(x_size, y_size);
   circle_.rad = initial_dest_rect.w/2.0;
 
-  ray_velocity_ = 0.0001; // will be an important gameplay parameter
+  ray_velocity_ = 0.0005; // will be an important gameplay parameter
 
   health_remaining_ = hp;
 
@@ -39,6 +39,7 @@ void Player::HandleEvents(SDL_Event &e){
     switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
         invincibility_timer_.PauseSw();
+        blink_timer_.PauseSw();
     }
   default:
     break;

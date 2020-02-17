@@ -9,6 +9,8 @@ EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* p
   window_ = window;
   player_ = player;
   renderer_ = renderer;
+  enemies_.reserve(MAX_ENEMIES);
+
 }
 
 EnemyHandler::~EnemyHandler()
@@ -39,7 +41,7 @@ void EnemyHandler::HandleEvents(SDL_Event &e){
 
 void EnemyHandler::Update(){
 
-  for(auto &e : enemies_){
+  for(auto e : enemies_){
     e->Update();
 
     //Check for out of bounds
@@ -55,6 +57,8 @@ void EnemyHandler::Update(){
 
       //check ray collision
       if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
+        //increment score here
+
         e->setDead(true);
       }
     }
@@ -66,11 +70,12 @@ void EnemyHandler::Update(){
   }
   player_shot_ = false;
 
+  //clean dead enemies
   enemies_.erase(
       std::remove_if(
           enemies_.begin(),
         enemies_.end(),
-          [](Enemy* e) { return e->isDead(); }
+          [](auto e) { return e->isDead(); }
           ),
         enemies_.end()
       );
@@ -124,7 +129,7 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
     break;
   }
 
-  //based on location, initilize velocoty to travel toward middle of screen
+  //different starting velocity for different types of enemies
   Physics::Vec2D vel = {0.0, 0.0};
   switch(enemy_type){
   case Enemy::TOWARD_MIDDLE:
@@ -141,7 +146,7 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
     break;
   }
 
-  enemies_.push_back(new Enemy(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
+  enemies_.push_back(std::make_shared<Enemy>(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
 }
 
 /*

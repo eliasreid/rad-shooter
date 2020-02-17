@@ -24,6 +24,10 @@ GameObject::GameObject(SDL_Renderer* rend, std::string texture_path, SDL_Rect in
   }
 }
 
+GameObject::~GameObject(){
+  Clean();
+}
+
 void GameObject::Update(){
 
 }

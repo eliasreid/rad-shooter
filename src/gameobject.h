@@ -9,6 +9,7 @@ class GameObject
 {
 public:
   GameObject(SDL_Renderer* rend, std::string texture_path,  SDL_Rect intial_dest_rect);
+  ~GameObject();
   virtual void Update();
   virtual void Render();
   virtual void Clean();
