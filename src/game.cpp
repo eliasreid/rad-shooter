@@ -138,7 +138,7 @@ void Game::Render(){
   player_->Render();
   enemy_handler_->Render();
   health_text_->Render();
-  game_over_text_->Render();
+//  game_over_text_->Render();
   SDL_RenderPresent(renderer_);
 }
 
@@ -151,6 +151,7 @@ void Game::Restart(){
   //should I delete the object and call constructor?
   //Can't do that, becasue enemy_handler has reference to it
 
+  player_->Reset();
   enemy_handler_->Reset();
 
 
@@ -170,7 +171,7 @@ void Game::GameLoop(){
 void Game::Close(){
   player_->Clean();
   health_text_->Clean();
-  game_over_text_->Clean();
+//  game_over_text_->Clean();
   enemy_handler_->Clean();
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;

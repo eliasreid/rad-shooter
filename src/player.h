@@ -18,6 +18,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update() override;
   void Render() override;
+  void Reset();
   void RenderLine(); // Maybe add args
   void Damage();
   Physics::Circle getCircle();
@@ -27,7 +28,7 @@ public:
 private:
   Physics::Circle circle_;
   float ray_velocity_;
-  float ray_angle_ = 45 *M_PI/180; // angle in radians - zero is up, clockwise is positive
+  float ray_angle_; // angle in radians - zero is up, clockwise is positive
   float ray_length_;
   Physics::Vec2D ray_start_;
   Physics::Vec2D ray_end_;
@@ -36,8 +37,11 @@ private:
   bool is_invincible;
   bool is_visible_;
   int health_remaining_;
+  int max_hp_;
 
   SDL_Window* window_;
+
+  void setHealth(int health);
 };
 
 #endif // PLAYER_H

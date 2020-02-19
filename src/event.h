@@ -2,8 +2,9 @@
 #define EVENT_H
 
 enum class EVENT_TYPE{
-  PLAYER_DAMAGED,
+  HEALTH_CHANGED,
   PLAYER_SHOT,
+  PLAYER_DEAD,
   OTHER
 };
 

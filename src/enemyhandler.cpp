@@ -97,6 +97,7 @@ void EnemyHandler::Render(){
 void EnemyHandler::Reset(){
   //pretty much done by deleting the enemies
   Clean();
+  spawn_timer_.Reset();
 
 }
 

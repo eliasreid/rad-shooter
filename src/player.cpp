@@ -3,7 +3,7 @@
 #include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
-  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true) {
+  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true), ray_angle_(0), max_hp_(hp) {
 
   window_ = window;
   int x_size, y_size;
@@ -13,7 +13,7 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 
   ray_velocity_ = 0.0005; // will be an important gameplay parameter
 
-  health_remaining_ = hp;
+  health_remaining_ = max_hp_;
 
   invincibility_timer_.Init(1000, true);
   blink_timer_.Init(80);
@@ -96,6 +96,12 @@ void Player::Render(){
     RenderLine();
   }
 }
+
+void Player::Reset(){
+  ray_angle_ = 0;
+  setHealth(max_hp_);
+}
+
 void Player::RenderLine(){
   SDL_SetRenderDrawColor(renderer_,0,0,0,255);
   SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
@@ -105,8 +111,7 @@ void Player::Damage(){
   if(invincibility_timer_.CheckTimeout()){
     is_invincible = true;
     if(health_remaining_ > 0){
-      health_remaining_--;
-      Notify(this, EVENT_TYPE::PLAYER_DAMAGED);
+      setHealth(health_remaining_-1);
       std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
     }else{
       std::cout << "Overkill!" << std::endl;
@@ -126,3 +131,12 @@ void Player::RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2){
 int Player::getHealth(){
   return health_remaining_;
 }
+void Player::setHealth(int health){
+  health_remaining_ = health;
+  Notify(this, EVENT_TYPE::HEALTH_CHANGED);
+  if(health_remaining_ < 1){
+    Notify(this, EVENT_TYPE::PLAYER_DEAD);
+  }
+}
+
+
