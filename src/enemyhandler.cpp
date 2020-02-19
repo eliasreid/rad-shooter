@@ -41,7 +41,7 @@ void EnemyHandler::HandleEvents(SDL_Event &e){
 
 void EnemyHandler::Update(){
 
-  for(auto e : enemies_){
+  for(auto &e : enemies_){
     e->Update();
 
     //Check for out of bounds
