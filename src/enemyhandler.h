@@ -22,6 +22,7 @@ public:
   void HandleEvents(SDL_Event& e);
   void Update();
   void Render();
+  void Reset();
   void Clean();
   void PauseSw();
   void SpawnEnemy(Enemy::TYPE type, float speed);

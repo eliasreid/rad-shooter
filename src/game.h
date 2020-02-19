@@ -22,6 +22,7 @@ public:
   void HandleEvents();
   void Update();
   void Render();
+  void Restart();
   void Close();
 
   bool IsRunning();
@@ -30,6 +31,7 @@ private:
 
   bool running_;
   bool paused_;
+  bool game_over_;
   SDL_Renderer* renderer_;
   SDL_Window* window_;
   SDL_Event e;
@@ -38,6 +40,7 @@ private:
   Player* player_;
   EnemyHandler* enemy_handler_;
   HealthUI* health_text_;
+  TextBox* game_over_text_;
 
 //  std::vector<Enemy*> enemies_;
 

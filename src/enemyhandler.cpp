@@ -94,11 +94,15 @@ void EnemyHandler::Render(){
     e->Render();
   }
 }
+void EnemyHandler::Reset(){
+  //pretty much done by deleting the enemies
+  Clean();
+
+}
 
 void EnemyHandler::Clean(){
-  for(auto &e : enemies_){
-    e->Clean();
-  }
+  //Will destroy the pointees - textures are freed in GameObject destructor
+  enemies_.clear();
 }
 
 void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){

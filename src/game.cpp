@@ -2,7 +2,7 @@
 #include "game.h"
 #include "physics.h"
 
-Game::Game() : running_(false), paused_(false) // false unless initialized
+Game::Game() : running_(false), paused_(false), game_over_(false) // false unless initialized
 {
 }
 
@@ -103,7 +103,17 @@ void Game::HandleEvents(){
     if(e.type == SDL_KEYDOWN){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
-        paused_ = !paused_; //TODO send pause event to be handled by other classes.
+        paused_ = !paused_; //TODO send pause event to be handled by other classes? right now handling esc on object basis
+      case SDLK_r:
+        Restart();
+      }
+    }
+
+    //Handle mouse input
+    if(e.type == SDL_MOUSEBUTTONDOWN){
+      if(game_over_){
+        //Restart game
+        Restart();
       }
     }
 
@@ -128,7 +138,24 @@ void Game::Render(){
   player_->Render();
   enemy_handler_->Render();
   health_text_->Render();
+  game_over_text_->Render();
   SDL_RenderPresent(renderer_);
+}
+
+void Game::Restart(){
+  //what do I need to do here?
+
+  //Clear all enemies - do in enemy_handler::Reset()
+
+  //Reset player (Timers, health, etc.)
+  //should I delete the object and call constructor?
+  //Can't do that, becasue enemy_handler has reference to it
+
+  enemy_handler_->Reset();
+
+
+  //reset score (when exists)
+
 }
 
 void Game::GameLoop(){
@@ -143,6 +170,7 @@ void Game::GameLoop(){
 void Game::Close(){
   player_->Clean();
   health_text_->Clean();
+  game_over_text_->Clean();
   enemy_handler_->Clean();
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;
