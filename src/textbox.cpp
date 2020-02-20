@@ -1,7 +1,8 @@
 #include <iostream>
 #include "textbox.h"
 
-TextBox::TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_pos)
+TextBox::TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_pos, int font_size, bool is_visible)
+    : is_visible_(is_visible)
 {
   colour_ = {0,0,0,255}; // initialize text as black
   renderer_ = rend;
@@ -9,16 +10,26 @@ TextBox::TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_
   font_ = nullptr;
   dest_rect_.x = x_pos;
   dest_rect_.y = y_pos;
-  font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", 40); //Should be option, either Init or in constructor
+  dest_rect_.h = 0;
+  dest_rect_.w = 0;
+  font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", font_size); //Should be option, either Init or in constructor
   if(font_ == nullptr){
     printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
   }else{
     //Initialize texture based on the given text
     UpdateText(initial_text);
   }
-
 }
 
+TextBox::~TextBox(){
+  Clean();
+}
+
+/**
+ * @brief TextBox::UpdateText
+ * @param new_text
+ * @param font_size - leave unchanged if 0
+ */
 void TextBox::UpdateText(std::string new_text, int font_size){
 
   //reload font with new given size.
@@ -45,14 +56,24 @@ void TextBox::UpdateText(std::string new_text, int font_size){
     SDL_FreeSurface(text_surface);
   }
 }
-
-void TextBox::UpdatePos(int x_pos, int y_pos){
-  dest_rect_.x = x_pos;
-  dest_rect_.y = y_pos;
+/**
+ * @brief TextBox::UpdatePos
+ * @param x_pos
+ * @param y_pos
+ * @param centered - if true, use x_pos, y_pos as centre of dest_rect
+ */
+void TextBox::UpdatePos(int x_pos, int y_pos, bool centered){
+  if(!centered){
+    dest_rect_.x = x_pos;
+    dest_rect_.y = y_pos;
+  } else{
+    dest_rect_.x = x_pos - dest_rect_.w/2;
+    dest_rect_.y = y_pos - dest_rect_.h/2;
+  }
 }
 
 void TextBox::Render(){
-  if(texture_ != nullptr){
+  if(texture_ != nullptr && is_visible_){
     SDL_RenderCopy(renderer_, texture_, nullptr, &dest_rect_);
   }
 }
@@ -63,3 +84,6 @@ void TextBox::Clean(){
   }
 }
 
+void TextBox::setVisible(bool visible){
+  is_visible_ = visible;
+}

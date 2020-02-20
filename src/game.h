@@ -7,10 +7,11 @@
 #include "player.h"
 #include "enemy.h"
 #include "enemyhandler.h"
+#include "observer.h"
 #include "textbox.h"
 #include "healthui.h"
 
-class Game
+class Game : public Observer
 {
 public:
   Game();
@@ -42,9 +43,7 @@ private:
   HealthUI* health_text_;
   TextBox* game_over_text_;
 
-//  std::vector<Enemy*> enemies_;
-
-  void SpawnEnemy();
+  void onNotify(GameObject *obj, EVENT_TYPE event_type) override;
 
 };
 

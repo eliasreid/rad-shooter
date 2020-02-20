@@ -108,13 +108,13 @@ void Player::RenderLine(){
 }
 
 void Player::Damage(){
-  if(invincibility_timer_.CheckTimeout()){
-    is_invincible = true;
-    if(health_remaining_ > 0){
+
+  if(health_remaining_ > 0){
+    if(invincibility_timer_.CheckTimeout()){
+      //player is not invincible, apply damage and make invincible
+      is_invincible = true;
       setHealth(health_remaining_-1);
       std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
-    }else{
-      std::cout << "Overkill!" << std::endl;
     }
   }
 }

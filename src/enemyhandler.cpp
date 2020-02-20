@@ -98,7 +98,7 @@ void EnemyHandler::Reset(){
   //pretty much done by deleting the enemies
   Clean();
   spawn_timer_.Reset();
-
+  is_spawning_ = true;
 }
 
 void EnemyHandler::Clean(){
@@ -166,9 +166,11 @@ void EnemyHandler::onNotify(GameObject *obj, EVENT_TYPE event_type){
   case EVENT_TYPE::PLAYER_SHOT:
     player_shot_ = true;
     break;
+  case EVENT_TYPE::PLAYER_DEAD:
+    is_spawning_ = false;
+    break;
   default:
     break;
   }
-
 }
 
