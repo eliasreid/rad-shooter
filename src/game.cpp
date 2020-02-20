@@ -72,17 +72,20 @@ bool Game::Init(){
 
             //Instantiate physics and player
             physics_ = Physics();
-            player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_, 4);
-            enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-            health_text_ = new HealthUI(renderer_,"Health: 4", 0, 0, 40);
-            game_over_text_ = new TextBox(renderer_,"Game Over", 0, 0, 65, false);
-            game_over_text_->UpdatePos(window_width / 2,window_height / 2, true);
+            player_ = std::make_shared<Player>(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_, 4);
+            enemy_handler_ = std::make_shared<EnemyHandler>(window_, renderer_, player_);
+            health_text_ = std::make_shared<HealthUI>(renderer_, window_, "Health: 4", TextBox::SCREEN_POS::TOP_LEFT, 40);
+            game_over_text_ = std::make_shared<TextBox>(renderer_, window_, "Game Over", TextBox::SCREEN_POS::CENTRE, 65, false);
+            score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0", TextBox::SCREEN_POS::TOP_RIGHT, 40);
 
 
+//            enemy_handler_->AddObserver(score_text_);
             player_->AddObserver(health_text_);
-            player_->AddObserver(this);
+            player_->AddObserver(shared_from_this());
             player_->AddObserver(enemy_handler_);
+
             enemy_handler_->Init();
+            enemy_handler_->AddObserver(score_text_);
   //          paused_=true;
 
             //Hide mouses - leave mouse on for development
@@ -142,6 +145,7 @@ void Game::Render(){
   player_->Render();
   enemy_handler_->Render();
   health_text_->Render();
+  score_text_->Render();
   game_over_text_->Render();
   SDL_RenderPresent(renderer_);
 }
@@ -150,6 +154,7 @@ void Game::Restart(){
 
   player_->Reset();
   enemy_handler_->Reset();
+  score_text_->Reset();
   game_over_text_->setVisible(false);
   //reset score (when exists)
 
@@ -165,6 +170,8 @@ void Game::GameLoop(){
 }
 
 void Game::Close(){
+  //most of these cleans should be taken care of with their destructors
+  //not sure if explicit cleans here are necessary
   player_->Clean();
   health_text_->Clean();
   game_over_text_->Clean();

@@ -3,11 +3,10 @@
 #include <iostream>
 #include "enemyhandler.h"
 
-EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), player_shot_(false)
+EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, std::shared_ptr<Player> player) :
+  spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), player_shot_(false), player_(player)
 {
   window_ = window;
-  player_ = player;
   renderer_ = renderer;
   enemies_.reserve(MAX_ENEMIES);
 
@@ -46,8 +45,8 @@ void EnemyHandler::Update(){
 
     //Check for out of bounds
     if(!e->isOnScreen()){
-      e->Clean();
       e->setDead(true);
+      player_->Damage();
     }
 
     if(!e->isDead() && player_shot_){
@@ -58,7 +57,7 @@ void EnemyHandler::Update(){
       //check ray collision
       if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
         //increment score here
-
+        Notify(nullptr, EVENT_TYPE::SCORE);
         e->setDead(true);
       }
     }
@@ -70,15 +69,11 @@ void EnemyHandler::Update(){
   }
   player_shot_ = false;
 
-  //clean dead enemies
-  enemies_.erase(
-      std::remove_if(
-          enemies_.begin(),
-        enemies_.end(),
-          [](auto e) { return e->isDead(); }
-          ),
-        enemies_.end()
-      );
+  //clear dead enemies from vector.
+  enemies_.erase(std::remove_if(enemies_.begin(), enemies_.end(),
+                                [](auto e) {
+                                  return e->isDead();
+                                }), enemies_.end());
 
   //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
@@ -159,7 +154,6 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
  * right now checking after enemies move, but here would be before
  * So keep the player_shot_ bool, but set here instead of on mousepress
 */
-
 void EnemyHandler::onNotify(GameObject *obj, EVENT_TYPE event_type){
   //game object will be player
   switch(event_type){

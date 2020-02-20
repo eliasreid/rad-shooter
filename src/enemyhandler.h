@@ -12,10 +12,10 @@
 
 static const size_t MAX_ENEMIES = 100;
 
-class EnemyHandler : public Observer
+class EnemyHandler : public Observer, public Subject
 {
 public:
-  EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player);
+  EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, std::shared_ptr<Player> player);
   ~EnemyHandler();
 
   void Init();
@@ -44,7 +44,7 @@ private:
   bool player_shot_;
   Timer spawn_timer_;
   SDL_Window* window_;
-  Player* player_;
+  std::shared_ptr<Player> player_;
   SDL_Renderer* renderer_;
 
   std::chrono::high_resolution_clock::time_point  prev_spawn_time_;

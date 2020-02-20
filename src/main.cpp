@@ -1,20 +1,21 @@
 #include <iostream>
+#include <memory>
 #include <SDL.h>
 #include "game.h"
 
 int main(int argc, char* args[]){
 
-  Game game;
+  std::shared_ptr<Game> game = std::make_shared<Game>();
 
-  if(!game.Init()){
+  if(!game->Init()){
     std::cerr << "Game failed to initialize" << std::endl;
   } else{
 
-    while(game.IsRunning()){
-      game.GameLoop();
+    while(game->IsRunning()){
+      game->GameLoop();
     }
 
-    game.Close();
+    game->Close();
   }
   return 0;
 }

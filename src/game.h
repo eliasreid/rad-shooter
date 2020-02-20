@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <vector>
+#include <memory>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "gameobject.h"
@@ -10,8 +11,9 @@
 #include "observer.h"
 #include "textbox.h"
 #include "healthui.h"
+#include "scoreui.h"
 
-class Game : public Observer
+class Game : public Observer, public std::enable_shared_from_this<Game>
 {
 public:
   Game();
@@ -38,10 +40,11 @@ private:
   SDL_Event e;
 
   Physics physics_;
-  Player* player_;
-  EnemyHandler* enemy_handler_;
-  HealthUI* health_text_;
-  TextBox* game_over_text_;
+  std::shared_ptr<Player> player_;
+  std::shared_ptr<EnemyHandler> enemy_handler_;
+  std::shared_ptr<HealthUI> health_text_;
+  std::shared_ptr<TextBox> game_over_text_;
+  std::shared_ptr<ScoreUI> score_text_;
 
   void onNotify(GameObject *obj, EVENT_TYPE event_type) override;
 
