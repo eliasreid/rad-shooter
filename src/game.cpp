@@ -2,7 +2,7 @@
 #include "game.h"
 #include "physics.h"
 
-Game::Game() : running_(false), paused_(false) // false unless initialized
+Game::Game() : running_(false), paused_(false), game_over_(false) // false unless initialized
 {
 }
 
@@ -74,10 +74,13 @@ bool Game::Init(){
             physics_ = Physics();
             player_ = new Player(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_, 4);
             enemy_handler_ = new EnemyHandler(window_, renderer_, player_);
-            health_text_ = new HealthUI(renderer_,"Health: 4", 0, 0);
+            health_text_ = new HealthUI(renderer_,"Health: 4", 0, 0, 40);
+            game_over_text_ = new TextBox(renderer_,"Game Over", 0, 0, 65, false);
+            game_over_text_->UpdatePos(window_width / 2,window_height / 2, true);
 
 
             player_->AddObserver(health_text_);
+            player_->AddObserver(this);
             player_->AddObserver(enemy_handler_);
             enemy_handler_->Init();
   //          paused_=true;
@@ -103,7 +106,18 @@ void Game::HandleEvents(){
     if(e.type == SDL_KEYDOWN){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
-        paused_ = !paused_; //TODO send pause event to be handled by other classes.
+        paused_ = !paused_; //TODO send pause event to be handled by other classes? right now handling esc on object basis
+      case SDLK_r:
+        Restart();
+      }
+    }
+
+    //Handle mouse input
+    if(e.type == SDL_MOUSEBUTTONDOWN){
+      if(game_over_){
+        //Restart game
+        game_over_ = false; // Better to do here or in Restart?
+        Restart();
       }
     }
 
@@ -128,7 +142,17 @@ void Game::Render(){
   player_->Render();
   enemy_handler_->Render();
   health_text_->Render();
+  game_over_text_->Render();
   SDL_RenderPresent(renderer_);
+}
+
+void Game::Restart(){
+
+  player_->Reset();
+  enemy_handler_->Reset();
+  game_over_text_->setVisible(false);
+  //reset score (when exists)
+
 }
 
 void Game::GameLoop(){
@@ -143,6 +167,7 @@ void Game::GameLoop(){
 void Game::Close(){
   player_->Clean();
   health_text_->Clean();
+  game_over_text_->Clean();
   enemy_handler_->Clean();
   SDL_DestroyRenderer(renderer_);
   renderer_ = nullptr;
@@ -156,4 +181,17 @@ void Game::Close(){
 
 bool Game::IsRunning(){
   return running_;
+}
+
+void Game::onNotify(GameObject *obj, EVENT_TYPE event_type){
+  //game object will be player
+  switch(event_type){
+  case EVENT_TYPE::PLAYER_DEAD:
+    game_over_ = true;
+    game_over_text_->setVisible(true);
+    break;
+  default:
+    break;
+  }
+
 }

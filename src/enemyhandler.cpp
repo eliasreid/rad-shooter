@@ -94,11 +94,16 @@ void EnemyHandler::Render(){
     e->Render();
   }
 }
+void EnemyHandler::Reset(){
+  //pretty much done by deleting the enemies
+  Clean();
+  spawn_timer_.Reset();
+  is_spawning_ = true;
+}
 
 void EnemyHandler::Clean(){
-  for(auto &e : enemies_){
-    e->Clean();
-  }
+  //Will destroy the pointees - textures are freed in GameObject destructor
+  enemies_.clear();
 }
 
 void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
@@ -161,9 +166,11 @@ void EnemyHandler::onNotify(GameObject *obj, EVENT_TYPE event_type){
   case EVENT_TYPE::PLAYER_SHOT:
     player_shot_ = true;
     break;
+  case EVENT_TYPE::PLAYER_DEAD:
+    is_spawning_ = false;
+    break;
   default:
     break;
   }
-
 }
 
