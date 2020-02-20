@@ -7,14 +7,14 @@ HEADERS = \
     $$PWD/src/enemyhandler.h \
     $$PWD/src/game.h \
     $$PWD/src/gameobject.h \
-    $$PWD/src/physics.h \
     $$PWD/src/player.h \
-    $$PWD/src/timer.h \
-    $$PWD/src/textbox.h \
-    $$PWD/src/event.h \
-    $$PWD/src/healthui.h \
-    $$PWD/src/observer.h \
-    $$PWD/src/subject.h
+    $$PWD/src/ui/textbox.h \
+    $$PWD/src/ui/healthui.h \
+    $$PWD/src/util/event.h \
+    $$PWD/src/util/physics.h \
+    $$PWD/src/util/timer.h \
+    $$PWD/src/util/observer.h \
+    $$PWD/src/util/subject.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -22,19 +22,23 @@ SOURCES = \
    $$PWD/src/enemyhandler.cpp \
    $$PWD/src/game.cpp \
    $$PWD/src/gameobject.cpp \
-   $$PWD/src/physics.cpp \
    $$PWD/src/player.cpp \
-   $$PWD/src/timer.cpp \
-   $$PWD/src/textbox.cpp \
-   $$PWD/src/healthui.cpp \
-   $$PWD/src/observer.cpp \
-   $$PWD/src/subject.cpp
+   $$PWD/src/ui/textbox.cpp \
+   $$PWD/src/ui/healthui.cpp \
+   $$PWD/src/util/physics.cpp \
+   $$PWD/src/util/timer.cpp \
+   $$PWD/src/util/observer.cpp \
+   $$PWD/src/util/subject.cpp
+
+INCLUDEPATH +=  $$PWD/src/ \
+                $$PWD/src/util \
+                $$PWD/src/ui \
 
 win32 {
     # Windows build config
     LIBDIR = G:/vsdevlib
 
-    INCLUDEPATH =   $$LIBDIR/SDL2-2.0.10/include \
+    INCLUDEPATH +=  $$LIBDIR/SDL2-2.0.10/include \
                     $$LIBDIR/SDL2_image-2.0.5/include \
                     $$LIBDIR/SDL2_ttf-2.0.15/include \
 
