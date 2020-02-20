@@ -46,8 +46,8 @@ void EnemyHandler::Update(){
 
     //Check for out of bounds
     if(!e->isOnScreen()){
-      e->Clean();
       e->setDead(true);
+      player_->Damage();
     }
 
     if(!e->isDead() && player_shot_){
@@ -70,15 +70,11 @@ void EnemyHandler::Update(){
   }
   player_shot_ = false;
 
-  //clean dead enemies
-  enemies_.erase(
-      std::remove_if(
-          enemies_.begin(),
-        enemies_.end(),
-          [](auto e) { return e->isDead(); }
-          ),
-        enemies_.end()
-      );
+  //clear dead enemies from vector.
+  enemies_.erase(std::remove_if(enemies_.begin(), enemies_.end(),
+                                [](auto e) {
+                                  return e->isDead();
+                                }), enemies_.end());
 
   //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
@@ -159,7 +155,6 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
  * right now checking after enemies move, but here would be before
  * So keep the player_shot_ bool, but set here instead of on mousepress
 */
-
 void EnemyHandler::onNotify(GameObject *obj, EVENT_TYPE event_type){
   //game object will be player
   switch(event_type){
