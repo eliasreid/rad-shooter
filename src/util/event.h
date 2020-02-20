@@ -5,6 +5,7 @@ enum class EVENT_TYPE{
   HEALTH_CHANGED,
   PLAYER_SHOT,
   PLAYER_DEAD,
+  SCORE,
   OTHER
 };
 

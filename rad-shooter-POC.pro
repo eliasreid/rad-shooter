@@ -14,7 +14,8 @@ HEADERS = \
     $$PWD/src/util/physics.h \
     $$PWD/src/util/timer.h \
     $$PWD/src/util/observer.h \
-    $$PWD/src/util/subject.h
+    $$PWD/src/util/subject.h \
+    src/ui/scoreui.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -28,7 +29,8 @@ SOURCES = \
    $$PWD/src/util/physics.cpp \
    $$PWD/src/util/timer.cpp \
    $$PWD/src/util/observer.cpp \
-   $$PWD/src/util/subject.cpp
+   $$PWD/src/util/subject.cpp \
+   src/ui/scoreui.cpp
 
 INCLUDEPATH +=  $$PWD/src/ \
                 $$PWD/src/util \
