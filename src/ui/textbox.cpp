@@ -1,8 +1,8 @@
 #include <iostream>
 #include "textbox.h"
 
-TextBox::TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_pos, int font_size, bool is_visible)
-    : is_visible_(is_visible)
+TextBox::TextBox(SDL_Renderer* rend, SDL_Window* window, std::string initial_text, int x_pos, int y_pos, int font_size, bool is_visible)
+    : is_visible_(is_visible), window_(window)
 {
   colour_ = {0,0,0,255}; // initialize text as black
   renderer_ = rend;
@@ -18,6 +18,54 @@ TextBox::TextBox(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_
   }else{
     //Initialize texture based on the given text
     UpdateText(initial_text);
+  }
+}
+
+TextBox::TextBox(SDL_Renderer* rend, SDL_Window* window, std::string initial_text, SCREEN_POS pos, int font_size, bool is_visible)
+    : is_visible_(is_visible), window_(window)
+{
+  colour_ = {0,0,0,255}; // initialize text as black
+  renderer_ = rend;
+  texture_ = nullptr;
+  font_ = nullptr;
+  dest_rect_.h = 0;
+  dest_rect_.w = 0;
+  font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", font_size); //Should be option, either Init or in constructor
+  if(font_ == nullptr){
+    printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
+  }else{
+    //Initialize texture based on the given text
+    UpdateText(initial_text);
+    //if UpdateText was successful, we should have a height and width for the box
+    if((dest_rect_.w != 0) && (dest_rect_.h != 0)){
+
+      int screen_width, screen_height;
+      SDL_GetWindowSize(window_, &screen_width, &screen_height);
+      //TODO: test this
+      switch(pos){
+      case SCREEN_POS::CENTRE:
+        //need screen dimensions
+        UpdatePos(screen_width/2, screen_height/2, true);
+        break;
+      case SCREEN_POS::TOP_LEFT:
+        UpdatePos(0,0);
+        break;
+      case SCREEN_POS::TOP_RIGHT:
+        UpdatePos(screen_width - dest_rect_.w, 0);
+        break;
+      case SCREEN_POS::BOTTOM_LEFT:
+        UpdatePos(0, screen_width - dest_rect_.h);
+        break;
+      case SCREEN_POS::BOTTOM_RIGHT:
+        UpdatePos(screen_width - dest_rect_.w, screen_width - dest_rect_.h);
+        break;
+      }
+    } else{
+      std::cerr << "Error initializing TextBox" << std::endl;
+      dest_rect_.x = 0;
+      dest_rect_.y = 0;
+    }
+
   }
 }
 

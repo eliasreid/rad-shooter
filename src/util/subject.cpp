@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "subject.h"
 
-void Subject::AddObserver(Observer* new_observer){
+void Subject::AddObserver(std::shared_ptr<Observer> new_observer){
   if(std::find(observers_.begin(), observers_.end(), new_observer) == observers_.end()){
     //reached end, so observer is not in list
     observers_.push_back(new_observer);
@@ -11,7 +11,7 @@ void Subject::AddObserver(Observer* new_observer){
   }
 }
 
-void Subject::RemoveObserver(Observer *observer_to_remove){
+void Subject::RemoveObserver(std::shared_ptr<Observer> observer_to_remove){
 
   auto found_obs = std::find(observers_.begin(), observers_.end(), observer_to_remove);
   if(found_obs != observers_.end()){

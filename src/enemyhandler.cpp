@@ -3,11 +3,10 @@
 #include <iostream>
 #include "enemyhandler.h"
 
-EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, Player* player) :
-    spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), player_shot_(false)
+EnemyHandler::EnemyHandler(SDL_Window* window, SDL_Renderer* renderer, std::shared_ptr<Player> player) :
+  spawn_period_(1000), size_(50), min_hit_period_(1000), is_spawning_(true), player_shot_(false), player_(player)
 {
   window_ = window;
-  player_ = player;
   renderer_ = renderer;
   enemies_.reserve(MAX_ENEMIES);
 
@@ -58,7 +57,7 @@ void EnemyHandler::Update(){
       //check ray collision
       if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
         //increment score here
-
+        Notify(nullptr, EVENT_TYPE::SCORE);
         e->setDead(true);
       }
     }

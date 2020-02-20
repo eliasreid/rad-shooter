@@ -9,7 +9,7 @@
 class HealthUI : public TextBox, public Observer
 {
 public:
-  HealthUI(SDL_Renderer* rend, std::string initial_text, int x_pos, int y_pos, int font_size);
+  HealthUI(SDL_Renderer* rend, SDL_Window* window, std::string initial_text, SCREEN_POS pos, int font_size);
 
 private:
   void onNotify(GameObject* obj, EVENT_TYPE event_type) override;
