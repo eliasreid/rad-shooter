@@ -13,7 +13,7 @@ public:
 
 private:
 
-  int fill_amount_; // ranges from 0 to width of fill_rect_
+  int max_fill_;
   SDL_Rect outline_rect_;
   SDL_Rect fill_rect_; // stays constant, then just render a rect in here based ond fill amount
   SDL_Renderer* rend_;
