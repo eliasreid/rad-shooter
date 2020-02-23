@@ -72,7 +72,7 @@ bool Game::Init(){
 
             //Instantiate physics and player
             physics_ = Physics();
-            player_ = std::make_shared<Player>(renderer_, "../rad-shooter-POC/assets/player.png", player_init_rect, window_, 4);
+            player_ = std::make_shared<Player>(renderer_, "../rad-shooter/assets/player.png", player_init_rect, window_, 4);
             enemy_handler_ = std::make_shared<EnemyHandler>(window_, renderer_, player_);
             health_text_ = std::make_shared<HealthUI>(renderer_, window_, "Health: 4", TextBox::SCREEN_POS::TOP_LEFT, 40);
             game_over_text_ = std::make_shared<TextBox>(renderer_, window_, "Game Over", TextBox::SCREEN_POS::CENTRE, 65, false);
