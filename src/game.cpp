@@ -172,7 +172,6 @@ void Game::Close(){
   //most of these cleans should be taken care of with their destructors
   //not sure if explicit cleans here are necessary
   player_->Clean();
-  health_text_->Clean();
   game_over_text_->Clean();
   enemy_handler_->Clean();
   SDL_DestroyRenderer(renderer_);
