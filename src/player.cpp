@@ -11,11 +11,12 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   ray_length_ = Physics::Length(x_size, y_size);
   circle_.rad = initial_dest_rect.w/2.0;
 
-  ray_velocity_ = 0.0005; // will be an important gameplay parameter
+  ray_velocity_ = 0.0005;
 
   health_remaining_ = max_hp_;
 
   invincibility_timer_.Init(1000, true);
+  reload_timer_.Init(500, true); // reload every 500ms, start timedout to allow initial shot
   blink_timer_.Init(80);
 }
 
@@ -31,8 +32,8 @@ void Player::HandleEvents(SDL_Event &e){
   } break;
 
   case SDL_MOUSEBUTTONDOWN:
-    //Only allow to shoot when not invincible
-    if(!is_invincible)
+    //Only allow to shoot when not invincible, and "reloaded"
+    if(!is_invincible && reload_timer_.CheckTimeout())
       Notify(this, EVENT_TYPE::PLAYER_SHOT);
     break;
   case SDL_KEYDOWN:

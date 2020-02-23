@@ -34,6 +34,7 @@ private:
   Physics::Vec2D ray_end_;
   Timer invincibility_timer_;
   Timer blink_timer_;
+  Timer reload_timer_;
   bool is_invincible;
   bool is_visible_;
   int health_remaining_;
