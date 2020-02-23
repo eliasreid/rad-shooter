@@ -37,12 +37,15 @@ private:
   Timer reload_timer_;
   bool is_invincible;
   bool is_visible_;
+  bool shot_ready_;
   int health_remaining_;
   int max_hp_;
 
   SDL_Window* window_;
 
   void setHealth(int health);
+  void ReloadShot();
+  void Shoot();
 };
 
 #endif // PLAYER_H

@@ -3,7 +3,8 @@
 #include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
-  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true), ray_angle_(0), max_hp_(hp) {
+  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true), ray_angle_(0), max_hp_(hp), shot_ready_(true)
+{
 
   window_ = window;
   int x_size, y_size;
@@ -16,7 +17,8 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   health_remaining_ = max_hp_;
 
   invincibility_timer_.Init(1000, true);
-  reload_timer_.Init(500, true); // reload every 500ms, start timedout to allow initial shot
+  reload_timer_.Init(500); // reload every 500ms, start timedout to allow initial shot
+  reload_timer_.setActive(false);
   blink_timer_.Init(80);
 }
 
@@ -32,15 +34,14 @@ void Player::HandleEvents(SDL_Event &e){
   } break;
 
   case SDL_MOUSEBUTTONDOWN:
-    //Only allow to shoot when not invincible, and "reloaded"
-    if(!is_invincible && reload_timer_.CheckTimeout())
-      Notify(this, EVENT_TYPE::PLAYER_SHOT);
+    Shoot();
     break;
   case SDL_KEYDOWN:
     switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
         invincibility_timer_.PauseSw();
         blink_timer_.PauseSw();
+        reload_timer_.PauseSw();
     }
   default:
     break;
@@ -71,6 +72,12 @@ void Player::Update(){
   ray_start_ = circle_.ctr;
   ray_end_.x = ray_start_.x + ray_length_ * sin(ray_angle_);
   ray_end_.y = ray_start_.y - ray_length_ * cos(ray_angle_);
+
+  if(reload_timer_.isActive()){
+    if(reload_timer_.CheckTimeout()){
+      ReloadShot();
+     }
+  }
 }
 
 void Player::Render(){
@@ -101,6 +108,7 @@ void Player::Render(){
 void Player::Reset(){
   ray_angle_ = 0;
   setHealth(max_hp_);
+  ReloadShot();
 }
 
 void Player::RenderLine(){
@@ -140,4 +148,18 @@ void Player::setHealth(int health){
   }
 }
 
+void Player::ReloadShot(){
+  reload_timer_.setActive(false);
+  shot_ready_ = true;
+  //handled by reload ui to redraw rect (TEMPORARY)
+  Notify(this, EVENT_TYPE::PLAYER_SHOT_READY);
+}
+void Player::Shoot(){
+  //Only allow to shoot when not invincible, and "reloaded"
+  if(!is_invincible && shot_ready_){
+    reload_timer_.setActive(true);
+    shot_ready_ = false;
+    Notify(this, EVENT_TYPE::PLAYER_SHOT);
+  }
+}
 
