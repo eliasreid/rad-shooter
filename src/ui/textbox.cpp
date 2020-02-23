@@ -12,7 +12,7 @@ TextBox::TextBox(SDL_Renderer* rend, SDL_Window* window, std::string initial_tex
   dest_rect_.y = y_pos;
   dest_rect_.h = 0;
   dest_rect_.w = 0;
-  font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", font_size); //Should be option, either Init or in constructor
+  font_ = TTF_OpenFont("../rad-shooter-POC/assets/zorque.ttf", font_size); //Should be option, either Init or in constructor
   if(font_ == nullptr){
     printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
   }else{
@@ -30,7 +30,7 @@ TextBox::TextBox(SDL_Renderer* rend, SDL_Window* window, std::string initial_tex
   font_ = nullptr;
   dest_rect_.h = 0;
   dest_rect_.w = 0;
-  font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", font_size); //Should be option, either Init or in constructor
+  font_ = TTF_OpenFont("../rad-shooter-POC/assets/zorque.ttf", font_size); //Should be option, either Init or in constructor
   if(font_ == nullptr){
     printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
   }else{
@@ -82,7 +82,7 @@ void TextBox::UpdateText(std::string new_text, int font_size){
 
   //reload font with new given size.
   if(font_size > 0){
-    font_ = TTF_OpenFont("../rad-shooter-POC/assets/lazy.ttf", font_size); //Should be option, either Init or in constructor
+    font_ = TTF_OpenFont("../rad-shooter-POC/assets/zorque.ttf", font_size); //Should be option, either Init or in constructor
   }
 
   //recreate texture using loaded font and text
