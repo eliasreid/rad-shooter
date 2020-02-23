@@ -21,7 +21,7 @@ EnemyHandler::~EnemyHandler()
 
 void EnemyHandler::Init(){
   spawn_timer_.Init(1000);
-  SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
+  SpawnEnemy(Enemy::TOWARD_MIDDLE, ENEMY_SPEED);
 }
 
 void EnemyHandler::PauseSw(){
@@ -75,10 +75,9 @@ void EnemyHandler::Update(){
                                   return e->isDead();
                                 }), enemies_.end());
 
-  //if time since prev is larger than spawn_period_, then spawn an enemy
   if(is_spawning_){
     if(spawn_timer_.CheckTimeout()){
-      SpawnEnemy(Enemy::TOWARD_MIDDLE, 0.1);
+      SpawnEnemy(Enemy::TOWARD_MIDDLE, ENEMY_SPEED);
     }
   }
 
@@ -90,7 +89,6 @@ void EnemyHandler::Render(){
   }
 }
 void EnemyHandler::Reset(){
-  //pretty much done by deleting the enemies
   Clean();
   spawn_timer_.Reset();
   is_spawning_ = true;
