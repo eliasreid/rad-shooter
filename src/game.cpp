@@ -76,10 +76,9 @@ bool Game::Init(){
             enemy_handler_ = std::make_shared<EnemyHandler>(window_, renderer_, player_);
             health_text_ = std::make_shared<HealthUI>(renderer_, window_, "Health: 4", TextBox::SCREEN_POS::TOP_LEFT, 40);
             game_over_text_ = std::make_shared<TextBox>(renderer_, window_, "Game Over", TextBox::SCREEN_POS::CENTRE, 65, false);
-            score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0", TextBox::SCREEN_POS::TOP_RIGHT, 40);
+            //Score ui element doesn't update it's size dynamically, so the extra space are to give room for other digits.
+            score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0          ", TextBox::SCREEN_POS::TOP_RIGHT, 40);
 
-
-//            enemy_handler_->AddObserver(score_text_);
             player_->AddObserver(health_text_);
             player_->AddObserver(shared_from_this());
             player_->AddObserver(enemy_handler_);
