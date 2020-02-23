@@ -78,10 +78,21 @@ bool Game::Init(){
             game_over_text_ = std::make_shared<TextBox>(renderer_, window_, "Game Over", TextBox::SCREEN_POS::CENTRE, 65, false);
             //Score ui element doesn't update it's size dynamically, so the extra space are to give room for other digits.
             score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0          ", TextBox::SCREEN_POS::TOP_RIGHT, 40);
+            //TODO tweak these to look good
+            int reload_w = 100;
+            int reload_h = 30;
+            int reload_padding = 5;
+            SDL_Rect reload_rect = { 0 + reload_padding,
+                                    window_height - (reload_h + reload_padding),
+                                   reload_w,
+                                   reload_h};
+
+            reload_ui_ = std::make_shared<ReloadUI>(renderer_, reload_rect);
 
             player_->AddObserver(health_text_);
             player_->AddObserver(shared_from_this());
             player_->AddObserver(enemy_handler_);
+            player_->AddObserver(reload_ui_);
 
             enemy_handler_->Init();
             enemy_handler_->AddObserver(score_text_);
@@ -146,6 +157,7 @@ void Game::Render(){
   health_text_->Render();
   score_text_->Render();
   game_over_text_->Render();
+  reload_ui_->Render();
   SDL_RenderPresent(renderer_);
 }
 

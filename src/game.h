@@ -12,6 +12,7 @@
 #include "textbox.h"
 #include "healthui.h"
 #include "scoreui.h"
+#include "reloadui.h"
 
 class Game : public Observer, public std::enable_shared_from_this<Game>
 {
@@ -45,6 +46,7 @@ private:
   std::shared_ptr<HealthUI> health_text_;
   std::shared_ptr<TextBox> game_over_text_;
   std::shared_ptr<ScoreUI> score_text_;
+  std::shared_ptr<ReloadUI> reload_ui_;
 
   void onNotify(GameObject *obj, EVENT_TYPE event_type) override;
 
