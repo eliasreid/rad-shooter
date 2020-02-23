@@ -17,7 +17,9 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
   health_remaining_ = max_hp_;
 
   invincibility_timer_.Init(1000, true);
-  reload_timer_.Init(500); // reload every 500ms, start timedout to allow initial shot
+
+  reload_time_ = 1000;
+  reload_timer_.Init(reload_time_);
   reload_timer_.setActive(false);
   blink_timer_.Init(80);
 }
@@ -139,6 +141,9 @@ void Player::RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2){
 
 int Player::getHealth(){
   return health_remaining_;
+}
+int Player::getReloadTime(){
+  return reload_time_;
 }
 void Player::setHealth(int health){
   health_remaining_ = health;

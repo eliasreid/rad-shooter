@@ -78,7 +78,7 @@ bool Game::Init(){
             game_over_text_ = std::make_shared<TextBox>(renderer_, window_, "Game Over", TextBox::SCREEN_POS::CENTRE, 65, false);
             //Score ui element doesn't update it's size dynamically, so the extra space are to give room for other digits.
             score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0          ", TextBox::SCREEN_POS::TOP_RIGHT, 40);
-            //TODO tweak these to look good
+
             int reload_w = 100;
             int reload_h = 30;
             int reload_padding = 5;
@@ -148,7 +148,7 @@ void Game::HandleEvents(){
 void Game::Update(){
   player_->Update();
   enemy_handler_->Update();
-
+  reload_ui_->Update();
 }
 
 void Game::Render(){
@@ -168,6 +168,7 @@ void Game::Restart(){
   player_->Reset();
   enemy_handler_->Reset();
   score_text_->Reset();
+  reload_ui_->Reset();
   game_over_text_->setVisible(false);
   //reset score (when exists)
 

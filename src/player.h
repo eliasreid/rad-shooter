@@ -24,6 +24,7 @@ public:
   Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
   int getHealth();
+  int getReloadTime();
 
 private:
   Physics::Circle circle_;
@@ -40,6 +41,7 @@ private:
   bool shot_ready_;
   int health_remaining_;
   int max_hp_;
+  int reload_time_;
 
   SDL_Window* window_;
 
