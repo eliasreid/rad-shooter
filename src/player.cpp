@@ -3,7 +3,7 @@
 #include "event.h"
 
 Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_dest_rect, SDL_Window* window, int hp) :
-  GameObject(rend, texture_path, initial_dest_rect), is_invincible(false), is_visible_(true), ray_angle_(0), max_hp_(hp), shot_ready_(true)
+  GameObject(rend, texture_path, initial_dest_rect), is_invincible_(false), is_visible_(true), ray_angle_(0), max_hp_(hp), shot_ready_(true)
 {
 
   window_ = window;
@@ -50,12 +50,7 @@ void Player::HandleEvents(SDL_Event &e){
   }
 
   if(e.type == SDL_MOUSEMOTION){
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-
-    //player should be centered on mouse - used to update render rect in Update()
-    circle_.ctr.x = x;
-    circle_.ctr.y = y;
+    MoveToMouse();
   }
 }
 
@@ -85,7 +80,7 @@ void Player::Update(){
 void Player::Render(){
 
   //If player is invincible, need additional checks and a timer to blink every X time interval
-  if(is_invincible){
+  if(is_invincible_){
     // keep checking until returns true, then reset invinsibility timer - start timed out
     if(!invincibility_timer_.CheckTimeout()){
       if(blink_timer_.CheckTimeout()){
@@ -96,7 +91,7 @@ void Player::Render(){
         RenderLine();
       }
     } else{
-      is_invincible = false;
+      is_invincible_ = false;
       is_visible_ = true;
       invincibility_timer_.Reset(true);
     }
@@ -118,16 +113,30 @@ void Player::RenderLine(){
   SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
 }
 
-void Player::Damage(){
+void Player::Damage(bool is_collision){
+  //for debugging
+  bool health_changed = false;
 
   if(health_remaining_ > 0){
-    if(invincibility_timer_.CheckTimeout()){
-      //player is not invincible, apply damage and make invincible
-      is_invincible = true;
+
+    if(is_collision){
+      if(invincibility_timer_.CheckTimeout()){
+        //player is not invincible, apply damage and make invincible
+        is_invincible_ = true;
+        setHealth(health_remaining_-1);
+        health_changed = true;
+      }
+    }else{
+      //player damaged not from directly collision. Independent from invincibility status
       setHealth(health_remaining_-1);
-      std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
+      health_changed = true;
     }
   }
+
+  if(health_changed){
+    std::cout << "player has been damaged! health_ is now  " << health_remaining_ << std::endl;
+  }
+
 }
 
 Physics::Circle Player::getCircle(){
@@ -161,10 +170,16 @@ void Player::ReloadShot(){
 }
 void Player::Shoot(){
   //Only allow to shoot when not invincible, and "reloaded"
-  if(!is_invincible && shot_ready_){
+  if(!is_invincible_ && shot_ready_){
     reload_timer_.setActive(true);
     shot_ready_ = false;
     Notify(this, EVENT_TYPE::PLAYER_SHOT);
   }
+}
+void Player::MoveToMouse(){
+  int x, y;
+  SDL_GetMouseState(&x, &y);
+  circle_.ctr.x = x;
+  circle_.ctr.y = y;
 }
 

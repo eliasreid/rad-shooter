@@ -19,8 +19,8 @@ public:
   void Update() override;
   void Render() override;
   void Reset();
-  void RenderLine(); // Maybe add args
-  void Damage();
+  void RenderLine();
+  void Damage(bool is_collision = true);
   Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
   int getHealth();
@@ -36,7 +36,7 @@ private:
   Timer invincibility_timer_;
   Timer blink_timer_;
   Timer reload_timer_;
-  bool is_invincible;
+  bool is_invincible_;
   bool is_visible_;
   bool shot_ready_;
   int health_remaining_;
@@ -48,6 +48,7 @@ private:
   void setHealth(int health);
   void ReloadShot();
   void Shoot();
+  void MoveToMouse();
 };
 
 #endif // PLAYER_H

@@ -46,7 +46,7 @@ void EnemyHandler::Update(){
     //Check for out of bounds
     if(!e->isOnScreen()){
       e->setDead(true);
-      player_->Damage();
+      player_->Damage(false);
     }
 
     if(!e->isDead() && player_shot_){

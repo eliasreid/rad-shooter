@@ -99,7 +99,7 @@ bool Game::Init(){
   //          paused_=true;
 
             //Hide mouses - leave mouse on for development
-  //          SDL_ShowCursor(SDL_DISABLE);
+            SDL_ShowCursor(SDL_DISABLE);
           }
         }
       }
@@ -112,10 +112,8 @@ bool Game::Init(){
 
 void Game::HandleEvents(){
 
-  //SDL_PollEvents will return zero when there's no events left on the queue
   while(SDL_PollEvent(&e) != 0){
 
-    //Handle game related Keyboard inputs.
     if(e.type == SDL_KEYDOWN){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
