@@ -11,6 +11,7 @@
 #include "event.h"
 
 static const size_t MAX_ENEMIES = 100;
+static const double ENEMY_SPEED = 0.2;
 
 class EnemyHandler : public Observer, public Subject
 {
