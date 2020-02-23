@@ -120,8 +120,10 @@ void Game::HandleEvents(){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
         paused_ = !paused_; //TODO send pause event to be handled by other classes? right now handling esc on object basis
+        break;
       case SDLK_r:
         Restart();
+        break;
       }
     }
 
