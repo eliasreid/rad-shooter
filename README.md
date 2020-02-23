@@ -1,4 +1,6 @@
-# rad-shooter-POC
+# rad-shooter
+
+Simply c++ arcade-y shooting game using SDL. Work in progress
 
 Dependencies:
  - SDL2 https://www.libsdl.org/download-2.0.php
