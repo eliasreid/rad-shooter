@@ -19,7 +19,7 @@ public:
 
   void Init(unsigned int period_ms, bool start_timedout = false);
   void setActive(bool is_active);
-  bool getActive();
+  bool isActive();
   void Reset(bool start_timedout = false);
   bool CheckTimeout();
   void PauseSw();

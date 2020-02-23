@@ -79,9 +79,20 @@ bool Game::Init(){
             //Score ui element doesn't update it's size dynamically, so the extra space are to give room for other digits.
             score_text_ = std::make_shared<ScoreUI>(renderer_, window_, "Score: 0          ", TextBox::SCREEN_POS::TOP_RIGHT, 40);
 
+            int reload_w = 100;
+            int reload_h = 30;
+            int reload_padding = 5;
+            SDL_Rect reload_rect = { 0 + reload_padding,
+                                    window_height - (reload_h + reload_padding),
+                                   reload_w,
+                                   reload_h};
+
+            reload_ui_ = std::make_shared<ReloadUI>(renderer_, reload_rect);
+
             player_->AddObserver(health_text_);
             player_->AddObserver(shared_from_this());
             player_->AddObserver(enemy_handler_);
+            player_->AddObserver(reload_ui_);
 
             enemy_handler_->Init();
             enemy_handler_->AddObserver(score_text_);
@@ -109,8 +120,10 @@ void Game::HandleEvents(){
       switch(e.key.keysym.sym){
       case SDLK_ESCAPE:
         paused_ = !paused_; //TODO send pause event to be handled by other classes? right now handling esc on object basis
+        break;
       case SDLK_r:
         Restart();
+        break;
       }
     }
 
@@ -135,7 +148,7 @@ void Game::HandleEvents(){
 void Game::Update(){
   player_->Update();
   enemy_handler_->Update();
-
+  reload_ui_->Update();
 }
 
 void Game::Render(){
@@ -146,6 +159,7 @@ void Game::Render(){
   health_text_->Render();
   score_text_->Render();
   game_over_text_->Render();
+  reload_ui_->Render();
   SDL_RenderPresent(renderer_);
 }
 
@@ -154,6 +168,7 @@ void Game::Restart(){
   player_->Reset();
   enemy_handler_->Reset();
   score_text_->Reset();
+  reload_ui_->Reset();
   game_over_text_->setVisible(false);
   //reset score (when exists)
 

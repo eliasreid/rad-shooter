@@ -24,6 +24,7 @@ public:
   Physics::Circle getCircle();
   void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
   int getHealth();
+  int getReloadTime();
 
 private:
   Physics::Circle circle_;
@@ -34,14 +35,19 @@ private:
   Physics::Vec2D ray_end_;
   Timer invincibility_timer_;
   Timer blink_timer_;
+  Timer reload_timer_;
   bool is_invincible;
   bool is_visible_;
+  bool shot_ready_;
   int health_remaining_;
   int max_hp_;
+  int reload_time_;
 
   SDL_Window* window_;
 
   void setHealth(int health);
+  void ReloadShot();
+  void Shoot();
 };
 
 #endif // PLAYER_H

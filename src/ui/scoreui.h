@@ -16,9 +16,10 @@ public:
 
 private:
   std::unique_ptr<TextBox> text_box_;
-  int score;
+  int current_score_;
 
   void onNotify(GameObject *obj, EVENT_TYPE event_type) override;
+  void UpdateScore(int new_score);
 
 
 };

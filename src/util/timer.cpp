@@ -27,7 +27,7 @@ void Timer::setActive(bool is_active){
     }
   }
 }
-bool Timer::getActive(){
+bool Timer::isActive(){
   return is_active_;
 }
 

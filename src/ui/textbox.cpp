@@ -41,7 +41,6 @@ TextBox::TextBox(SDL_Renderer* rend, SDL_Window* window, std::string initial_tex
 
       int screen_width, screen_height;
       SDL_GetWindowSize(window_, &screen_width, &screen_height);
-      //TODO: test this
       switch(pos){
       case SCREEN_POS::CENTRE:
         //need screen dimensions

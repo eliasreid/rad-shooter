@@ -10,12 +10,13 @@ HEADERS = \
     $$PWD/src/player.h \
     $$PWD/src/ui/textbox.h \
     $$PWD/src/ui/healthui.h \
+    $$PWD/src/ui/scoreui.h \
+    $$PWD/src/ui/reloadui.h \
     $$PWD/src/util/event.h \
     $$PWD/src/util/physics.h \
     $$PWD/src/util/timer.h \
     $$PWD/src/util/observer.h \
     $$PWD/src/util/subject.h \
-    src/ui/scoreui.h
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -26,11 +27,12 @@ SOURCES = \
    $$PWD/src/player.cpp \
    $$PWD/src/ui/textbox.cpp \
    $$PWD/src/ui/healthui.cpp \
+   $$PWD/src/ui/scoreui.cpp \
+   $$PWD/src/ui/reloadui.cpp \
    $$PWD/src/util/physics.cpp \
    $$PWD/src/util/timer.cpp \
    $$PWD/src/util/observer.cpp \
    $$PWD/src/util/subject.cpp \
-   src/ui/scoreui.cpp
 
 INCLUDEPATH +=  $$PWD/src/ \
                 $$PWD/src/util \
