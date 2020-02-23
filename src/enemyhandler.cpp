@@ -56,7 +56,7 @@ void EnemyHandler::Update(){
 
       //check ray collision
       if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
-        //increment score here
+        //increment score here (notifies score ui)
         Notify(nullptr, EVENT_TYPE::SCORE);
         e->setDead(true);
       }
