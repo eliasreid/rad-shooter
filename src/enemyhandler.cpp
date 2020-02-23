@@ -144,7 +144,7 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
     break;
   }
 
-  enemies_.push_back(std::make_shared<Enemy>(enemy_type, renderer_, window_, "../rad-shooter-POC/assets/enemy.png", spawn_rect,vel));
+  enemies_.push_back(std::make_shared<Enemy>(enemy_type, renderer_, window_, "../rad-shooter/assets/enemy.png", spawn_rect,vel));
 }
 
 /*
