@@ -18,7 +18,7 @@ GameObject::GameObject(SDL_Renderer* rend, std::string texture_path, SDL_Rect in
     }
 
     //set default dest_rect
-    dest_rect = intial_dest_rect;
+    dest_rect_ = intial_dest_rect;
 
     SDL_FreeSurface(tempS);
   }
@@ -34,7 +34,7 @@ void GameObject::Update(){
 
 void GameObject::Render(){
   if(texture_ != nullptr){
-    SDL_RenderCopy(renderer_, texture_, nullptr, &dest_rect);
+    SDL_RenderCopy(renderer_, texture_, nullptr, &dest_rect_);
   }
 
 }

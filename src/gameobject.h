@@ -17,7 +17,7 @@ public:
 protected:
   SDL_Renderer* renderer_;
   SDL_Texture* texture_;
-  SDL_Rect dest_rect;
+  SDL_Rect dest_rect_;
 
   //in vid he had srcRect adn destRect members in the GO class.
 

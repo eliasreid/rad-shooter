@@ -10,17 +10,15 @@ Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::strin
   circle_.ctr.y = initial_dest_rect.y + initial_dest_rect.h/2.0;
   circle_.rad = initial_dest_rect.w/2.0;
 
-
 }
 
 void Enemy::Update(){
 
-  //calculate new centre point based physics
   Physics::Move(circle_.ctr, velocity_);
 
   //udpate render_rect
-  dest_rect.x = circle_.ctr.x - dest_rect.w/2;
-  dest_rect.y = circle_.ctr.y - dest_rect.h/2;
+  dest_rect_.x = circle_.ctr.x - dest_rect_.w/2;
+  dest_rect_.y = circle_.ctr.y - dest_rect_.h/2;
 
 }
 
@@ -28,19 +26,19 @@ bool Enemy::isOnScreen(){
   int max_x, max_y;
   SDL_GetWindowSize(window_, &max_x, &max_y); // 1280, 720
 
-  if(circle_.ctr.x > max_x + dest_rect.w){
+  if(circle_.ctr.x > max_x + dest_rect_.w){
     //OOB on right
     return false;
   }
-  if(circle_.ctr.x < 0 - dest_rect.w){
+  if(circle_.ctr.x < 0 - dest_rect_.w){
     //OOB on right
     return false;
   }
-  if(circle_.ctr.y > max_y + dest_rect.h){
+  if(circle_.ctr.y > max_y + dest_rect_.h){
     //OOB on right
     return false;
   }
-  if(circle_.ctr.y < 0 - dest_rect.h){
+  if(circle_.ctr.y < 0 - dest_rect_.h){
     //OOB on right
     return false;
   }
