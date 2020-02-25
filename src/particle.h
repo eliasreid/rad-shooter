@@ -13,9 +13,9 @@ public:
   void Update() override;
 
 private:
-  int lifetime_;
-  float fade_rate;
-  int current_alpha_;
+  float fade_rate_;
+  float lifetime_;
+  float current_alpha_;
   Physics::Circle circle_;
   Physics::Vec2D velocity_;
 };
