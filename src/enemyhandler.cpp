@@ -26,6 +26,9 @@ void EnemyHandler::Init(){
 
 void EnemyHandler::PauseSw(){
   spawn_timer_.PauseSw();
+  for(auto &e : enemies_){
+    e->PauseSw();
+  }
 }
 
 void EnemyHandler::HandleEvents(SDL_Event &e){
@@ -45,7 +48,7 @@ void EnemyHandler::Update(){
 
     //Check for out of bounds
     if(!e->isOnScreen()){
-      e->setDead(true);
+      e->setDeletable();
       player_->Damage(false);
     }
 
@@ -58,7 +61,7 @@ void EnemyHandler::Update(){
       if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
         //increment score here (notifies score ui)
         Notify(nullptr, EVENT_TYPE::SCORE);
-        e->setDead(true);
+        e->Shot();
       }
     }
 
@@ -69,16 +72,20 @@ void EnemyHandler::Update(){
   }
   player_shot_ = false;
 
-  //clear dead enemies from vector.
+  //clear enemies from vector (that are finished exploding)
   enemies_.erase(std::remove_if(enemies_.begin(), enemies_.end(),
                                 [](auto e) {
-                                  return e->isDead();
+                                  if(e->isDeletable()){
+                                    std::cout << e->isDeletable() << std::endl;
+                                  }
+                                  return e->isDeletable();
                                 }), enemies_.end());
 
   if(is_spawning_){
     if(spawn_timer_.CheckTimeout()){
       SpawnEnemy(Enemy::TOWARD_MIDDLE, ENEMY_SPEED);
     }
+//    is_spawning_ = false; // FOR DEBUGGING
   }
 
 }
@@ -144,7 +151,8 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
     break;
   }
 
-  enemies_.push_back(std::make_shared<Enemy>(enemy_type, renderer_, window_, "../rad-shooter/assets/enemy.png", spawn_rect,vel));
+  enemies_.push_back(std::make_shared<Enemy>(
+      enemy_type, renderer_, window_, "../rad-shooter/assets/enemy.png", "../rad-shooter/assets/particle.png", spawn_rect,vel));
 }
 
 /*

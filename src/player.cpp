@@ -56,8 +56,8 @@ void Player::HandleEvents(SDL_Event &e){
 
 void Player::Update(){
   //Update player's render destination rect
-  dest_rect.x = circle_.ctr.x - dest_rect.w/2;
-  dest_rect.y = circle_.ctr.y - dest_rect.h/2;
+  dest_rect_.x = circle_.ctr.x - dest_rect_.w/2;
+  dest_rect_.y = circle_.ctr.y - dest_rect_.h/2;
 
   //apply angular velocity to ray_angle.
   Physics::Move(ray_angle_, ray_velocity_);

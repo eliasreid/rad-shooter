@@ -17,6 +17,7 @@ HEADERS = \
     $$PWD/src/util/timer.h \
     $$PWD/src/util/observer.h \
     $$PWD/src/util/subject.h \
+    $$PWD/src/particle.h \
 
 SOURCES = \
    $$PWD/src/main.cpp \
@@ -33,6 +34,7 @@ SOURCES = \
    $$PWD/src/util/timer.cpp \
    $$PWD/src/util/observer.cpp \
    $$PWD/src/util/subject.cpp \
+   $$PWD/src/particle.cpp \
 
 INCLUDEPATH +=  $$PWD/src/ \
                 $$PWD/src/util \
