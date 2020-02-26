@@ -8,7 +8,7 @@
 class Particle : public GameObject
 {
 public:
-  Particle(SDL_Renderer* rend, SDL_Rect initial_dest_rect, int lifetime, float speed);
+  Particle(SDL_Renderer* rend, SDL_Texture* preloaded_texture, SDL_Rect initial_dest_rect, int lifetime, float speed);
 
   void Update() override;
 
@@ -18,6 +18,7 @@ private:
   float current_alpha_;
   Physics::Circle circle_;
   Physics::Vec2D velocity_;
+  bool is_deletable_;
 };
 
 #endif // PARTICLE_H

@@ -85,7 +85,7 @@ void EnemyHandler::Update(){
     if(spawn_timer_.CheckTimeout()){
       SpawnEnemy(Enemy::TOWARD_MIDDLE, ENEMY_SPEED);
     }
-    is_spawning_ = false; // FOR DEBUGGING
+//    is_spawning_ = false; // FOR DEBUGGING
   }
 
 }
@@ -151,7 +151,8 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
     break;
   }
 
-  enemies_.push_back(std::make_shared<Enemy>(enemy_type, renderer_, window_, "../rad-shooter/assets/enemy.png", spawn_rect,vel));
+  enemies_.push_back(std::make_shared<Enemy>(
+      enemy_type, renderer_, window_, "../rad-shooter/assets/enemy.png", "../rad-shooter/assets/particle.png", spawn_rect,vel));
 }
 
 /*

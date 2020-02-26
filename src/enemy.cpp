@@ -1,7 +1,7 @@
 #include <iostream>
 #include "enemy.h"
 
-Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity)
+Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path, std::string particle_texture_path, SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity)
     : GameObject(rend, texture_path, initial_dest_rect), is_dead_(false), is_exploding_(false), is_deletable_(false){
 
   velocity_ = initial_velocity;
@@ -14,6 +14,22 @@ Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::strin
   particles_.reserve(NUM_PARTICLES);
   explode_timer_.Init(PARTICLE_LIFETIME);
   explode_timer_.setActive(false);
+
+  //TODO: put this in Texture class for the love of god
+  particle_texture_ = nullptr;
+  SDL_Surface* tempS = IMG_Load(particle_texture_path.c_str());
+
+  if(tempS == nullptr){
+    std::cerr << "Unable to load image at" << particle_texture_path << "! SDL_image Error: " << IMG_GetError() << std::endl;
+  }
+  else{
+    //Create texture from surface
+    particle_texture_ = SDL_CreateTextureFromSurface(renderer_, tempS);
+    if(particle_texture_ == nullptr){
+      std::cerr << "Unable to create texture from " << particle_texture_path << "! SDL Error: " << SDL_GetError() << std::endl;
+    }
+    SDL_FreeSurface(tempS);
+  }
 }
 
 void Enemy::Update(){
@@ -96,7 +112,7 @@ bool Enemy::isDeletable(){
 }
 void Enemy::setDeletable(bool deletable){
   is_deletable_ = deletable;
-  if(is_deletable_=true)
+  if(is_deletable_== true)
     is_dead_ = true;// Set dead as well so that we avoiding other checks in enemyhandler
 
 }
@@ -108,7 +124,7 @@ void Enemy::Shot(){
   for(int i =0; i<NUM_PARTICLES; i++){
     SDL_Rect p_rect = dest_rect_;
     p_rect.w=5; p_rect.h=5;
-    particles_.emplace_back(std::make_unique<Particle>(renderer_, p_rect, PARTICLE_LIFETIME, 0.5));
+    particles_.emplace_back(std::make_unique<Particle>(renderer_, particle_texture_,p_rect, PARTICLE_LIFETIME, 0.5));
   }
   explode_timer_.setActive(true);
 }

@@ -21,7 +21,7 @@ public:
     ZIGZAG
   };
 
-  Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path,  SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity);
+  Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path, std::string particle_texture_path, SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity);
 
   void Update() override;
   void UpdateParticles();
@@ -44,6 +44,7 @@ private:
   TYPE type_;
   Timer explode_timer_;
   std::vector<std::unique_ptr<Particle>> particles_;
+  SDL_Texture* particle_texture_;
 
   void Move();
 };
