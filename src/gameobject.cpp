@@ -2,6 +2,7 @@
 #include <iostream>
 
 GameObject::GameObject(SDL_Renderer* rend, std::string texture_path, SDL_Rect intial_dest_rect)
+: texture_mode_(UNIQUE)
 {
   renderer_ = rend;
   texture_ = nullptr;
@@ -24,6 +25,23 @@ GameObject::GameObject(SDL_Renderer* rend, std::string texture_path, SDL_Rect in
   }
 }
 
+/**
+ * @brief GameObject::GameObject overload provides the option to instantiate GameObject with existing texture
+ * @param rend
+ * @param preloaded_texture
+ * @param intial_dest_rect
+ */
+GameObject::GameObject(SDL_Renderer* rend, SDL_Texture* preloaded_texture, SDL_Rect intial_dest_rect)
+    : texture_mode_(SHARED)
+{
+  renderer_ = rend;
+  texture_ = preloaded_texture;
+
+  //set default dest_rect
+  dest_rect_ = intial_dest_rect;
+
+}
+
 GameObject::~GameObject(){
   Clean();
 }
@@ -39,7 +57,7 @@ void GameObject::Render(){
 
 }
 void GameObject::Clean(){
-  if(texture_ != nullptr){
+  if(texture_mode_ == UNIQUE && texture_ != nullptr){
     SDL_DestroyTexture(texture_);
     texture_ = nullptr;
   }
