@@ -1,5 +1,5 @@
 CONFIG -= qt
-CONFIG += console
+CONFIG += console c++17
 TARGET = radshooter
 
 HEADERS = \
