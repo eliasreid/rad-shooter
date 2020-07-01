@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <math.h>
 #include <chrono>
+#include <utility>
 #include "gameobject.h"
 #include "physics.h"
 #include "subject.h"
@@ -22,17 +23,18 @@ public:
   void RenderLine();
   void Damage(bool is_collision = true);
   Physics::Circle getCircle();
-  void RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2);
+  std::pair<Physics::Vec2, Physics::Vec2> getLinePoints() const;
   int getHealth();
   int getReloadTime();
+  bool isInvincible()const;
 
 private:
   Physics::Circle circle_;
   float ray_velocity_;
   float ray_angle_; // angle in radians - zero is up, clockwise is positive
   float ray_length_;
-  Physics::Vec2D ray_start_;
-  Physics::Vec2D ray_end_;
+  Physics::Vec2 ray_start_;
+  Physics::Vec2 ray_end_;
   Timer invincibility_timer_;
   Timer blink_timer_;
   Timer reload_timer_;

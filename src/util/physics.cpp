@@ -7,7 +7,7 @@ Physics::Physics() : prev_time(std::chrono::high_resolution_clock::now()){
 
 }
 
-void Physics::Move(Vec2D &pos, Vec2D vel){
+void Physics::Move(Vec2 &pos, Vec2 vel){
   pos.x += frametime_ms * vel.x;
   pos.y += frametime_ms * vel.y;
 }
@@ -22,11 +22,11 @@ void Physics::UpdateTime(){
   prev_time = current_time;
 }
 
-void Physics::Normalize(Vec2D &vec){
+void Physics::Normalize(Vec2 &vec){
   vec = vec / Length(vec);
 }
 
-float Physics::Length(const Vec2D &vec){
+float Physics::Length(const Vec2 &vec){
   return sqrt(pow(vec.x,2) + pow(vec.y,2));
 }
 
@@ -37,8 +37,8 @@ float Physics::Length(float x, float y){
 /*
  * For calclulating the centre of an SDL_Rect
 */
-Physics::Vec2D Physics::Centre(SDL_Rect r){
-  return Vec2D(r.x + r.w/2.0, r.y + r.h/2.0);
+Physics::Vec2 Physics::Centre(SDL_Rect r){
+  return Vec2(r.x + r.w/2.0, r.y + r.h/2.0);
 }
 
 bool Physics::CollisionCircleCircle(const Circle &c1, const Circle &c2){
@@ -61,10 +61,10 @@ bool Physics::CollisionCircleCircle(const Circle &c1, const Circle &c2){
  * @return
  */
 
-bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle &c){
+bool Physics::CollisionRayCircle(const Vec2 &p1, const Vec2 &p2, const Circle &c){
 
-  Vec2D ray_vec = p2-p1;
-  Vec2D vec_to_start = p1 - c.ctr;
+  Vec2 ray_vec = p2-p1;
+  Vec2 vec_to_start = p1 - c.ctr;
 
   if(Dot(ray_vec,vec_to_start) > 0){
     //enemy "behind" player - so don't bother checking
@@ -73,15 +73,15 @@ bool Physics::CollisionRayCircle(const Vec2D &p1, const Vec2D &p2, const Circle 
 
   float dist_from_line;
   float proj_on_ray = Dot(ray_vec, vec_to_start);
-  Vec2D vec_from_end = c.ctr - p2;
+  Vec2 vec_from_end = c.ctr - p2;
 
-  Vec2D e = vec_to_start - ray_vec * ( proj_on_ray / Dot(ray_vec, ray_vec));
+  Vec2 e = vec_to_start - ray_vec * ( proj_on_ray / Dot(ray_vec, ray_vec));
   if(Length(e) < c.rad){
     return true;
   }
   return false;
 }
 
-float Physics::Dot(const Vec2D &v1, const Vec2D &v2){
+float Physics::Dot(const Vec2 &v1, const Vec2 &v2){
   return v1.x * v2.x + v1.y * v2.y;
 }

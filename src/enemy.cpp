@@ -1,7 +1,7 @@
 #include <iostream>
 #include "enemy.h"
 
-Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path, std::string particle_texture_path, SDL_Rect initial_dest_rect, Physics::Vec2D initial_velocity)
+Enemy::Enemy(TYPE enemy_type, SDL_Renderer* rend, SDL_Window* window, std::string texture_path, std::string particle_texture_path, SDL_Rect initial_dest_rect, Physics::Vec2 initial_velocity)
     : GameObject(rend, texture_path, initial_dest_rect), is_dead_(false), is_exploding_(false), is_deletable_(false){
 
   velocity_ = initial_velocity;

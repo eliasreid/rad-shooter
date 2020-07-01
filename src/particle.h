@@ -17,7 +17,7 @@ private:
   float lifetime_;
   float current_alpha_;
   Physics::Circle circle_;
-  Physics::Vec2D velocity_;
+  Physics::Vec2 velocity_;
   bool is_deletable_;
 };
 

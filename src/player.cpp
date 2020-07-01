@@ -7,10 +7,11 @@ Player::Player(SDL_Renderer* rend, std::string texture_path,  SDL_Rect initial_d
 {
 
   window_ = window;
-  int x_size, y_size;
+  int x_size;
+  int y_size;
   SDL_GetWindowSize(window_, &x_size, &y_size);
   ray_length_ = Physics::Length(x_size, y_size);
-  circle_.rad = initial_dest_rect.w/2.0;
+  circle_.rad = initial_dest_rect.w / 2.0;
 
   ray_velocity_ = 0.0005;
 
@@ -109,7 +110,7 @@ void Player::Reset(){
 }
 
 void Player::RenderLine(){
-  SDL_SetRenderDrawColor(renderer_,0,0,0,255);
+  SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
   SDL_RenderDrawLine(renderer_, ray_start_.x, ray_start_.y, ray_end_.x, ray_end_.y);
 }
 
@@ -123,7 +124,7 @@ void Player::Damage(bool is_collision){
       if(invincibility_timer_.CheckTimeout()){
         //player is not invincible, apply damage and make invincible
         is_invincible_ = true;
-        setHealth(health_remaining_-1);
+        setHealth(health_remaining_ - 1);
         health_changed = true;
       }
     }else{
@@ -143,9 +144,8 @@ Physics::Circle Player::getCircle(){
     return circle_;
 }
 
-void Player::RayPoints(Physics::Vec2D &vec1, Physics::Vec2D &vec2){
-  vec1 = circle_.ctr;
-  vec2 = ray_end_;
+std::pair<Physics::Vec2, Physics::Vec2> Player::getLinePoints() const {
+  return {circle_.ctr, ray_end_};
 }
 
 int Player::getHealth(){
@@ -183,3 +183,6 @@ void Player::MoveToMouse(){
   circle_.ctr.y = y;
 }
 
+bool Player::isInvincible() const{
+  return is_invincible_;
+}

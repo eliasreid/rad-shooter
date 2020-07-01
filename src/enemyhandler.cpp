@@ -53,12 +53,12 @@ void EnemyHandler::Update(){
     }
 
     if(!e->isDead() && player_shot_){
-      Physics::Vec2D ray_start;
-      Physics::Vec2D ray_end;
-      player_->RayPoints(ray_start, ray_end);
+
+
+      const auto ray_points = player_->getLinePoints();
 
       //check ray collision
-      if(Physics::CollisionRayCircle(ray_start,ray_end, e->getCircle())){
+      if(Physics::CollisionRayCircle(ray_points.first, ray_points.second, e->getCircle())){
         //increment score here (notifies score ui)
         Notify(nullptr, EVENT_TYPE::SCORE);
         e->Shot();
@@ -135,11 +135,11 @@ void EnemyHandler::SpawnEnemy(Enemy::TYPE enemy_type, float initial_speed){
   }
 
   //different starting velocity for different types of enemies
-  Physics::Vec2D vel = {0.0, 0.0};
+  Physics::Vec2 vel = {0.0, 0.0};
   switch(enemy_type){
   case Enemy::TOWARD_MIDDLE:
     //position of screen centre - position of enemy centre
-    vel = Physics::Vec2D(screen_width / 2, screen_height / 2) - Physics::Centre(spawn_rect);
+    vel = Physics::Vec2(screen_width / 2, screen_height / 2) - Physics::Centre(spawn_rect);
     Physics::Normalize(vel);
     vel = vel * initial_speed;
     break;
